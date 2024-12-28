@@ -1,0 +1,57 @@
+# version: "3.9"
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/var/www/html
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=adminbarrio
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+    networks:
+      - app-network
+    ports:
+      - "8010:8000"
+    depends_on:
+      - db
+
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./frontend:/app
+  #   networks:
+  #     - app-network
+  #   ports:
+  #     - "3000:3000"
+
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: adminbarrio
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - app-network
+    ports:
+      - "3311:3306"
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8026:8025"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-data:
