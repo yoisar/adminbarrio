@@ -9,9 +9,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+// Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/send-notification', function () {
     $user = User::first(); // Obtén el primer usuario de la base de datos
     $user->notify(new TestNotification()); // Enviar la notificación
