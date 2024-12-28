@@ -18,7 +18,3 @@ Route::get('/send-notification', function () {
 
     return 'Notificación enviada';
 });
-
-// Auth::routes();
-
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
