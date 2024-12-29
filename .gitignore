@@ -1,2 +1,4 @@
 
 /extras
+/frontend/dist
+frontend/.env
