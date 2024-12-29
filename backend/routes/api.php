@@ -9,7 +9,8 @@ use App\Http\Controllers\{
     CobrosController,
     UserController,
     UserProfileController,
-    CategoriaGastoController
+    CategoriaGastoController,
+    AuthController
 };
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -34,26 +35,8 @@ Route::middleware('api')->group(function () {
     Route::apiResource('categorias', CategoriaGastoController::class);
     Route::get('/cobros/morosos', [CobrosController::class, 'morosos']);
     Route::get('/users/role/user', [UserController::class, 'listUsers']); // Endpoint para listar usuarios con rol 'user'
-    Route::post('/login', function (Request $request) {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
-
-        $user = User::where('email', $credentials['email'])->first();
-
-        if (!$user || !Hash::check($credentials['password'], $user->password)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
-        }
-
-        // Generar un token de acceso
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer'
-        ]);
-    });
+    Route::post('/login', [AuthController::class, 'login']); // Endpoint para login
+    Route::post('/verify_token', [AuthController::class, 'verifyToken'])->middleware('auth:sanctum');
 });
 
 // Rutas protegidas por autenticación con Sanctum
