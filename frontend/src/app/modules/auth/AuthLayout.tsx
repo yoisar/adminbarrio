@@ -1,9 +1,11 @@
-
-import {useEffect} from 'react'
-import {Outlet, Link} from 'react-router-dom'
-import {toAbsoluteUrl} from '../../../_metronic/helpers'
+import { useEffect } from 'react'
+import { useIntl } from 'react-intl'
+import { Outlet } from 'react-router-dom'
+import { toAbsoluteUrl } from '../../../_metronic/helpers'
 
 const AuthLayout = () => {
+  const intl = useIntl()
+
   useEffect(() => {
     const root = document.getElementById('root')
     if (root) {
@@ -35,15 +37,15 @@ const AuthLayout = () => {
           {/* begin::Links */}
           <div className='d-flex fw-semibold text-primary fs-base'>
             <a href='#' className='px-5' target='_blank'>
-              Terms
+              {intl.formatMessage({ id: 'AUTH.LAYOUT.TERMS' })}
             </a>
 
             <a href='#' className='px-5' target='_blank'>
-              Plans
+              {intl.formatMessage({ id: 'AUTH.LAYOUT.PLANS' })}
             </a>
 
             <a href='#' className='px-5' target='_blank'>
-              Contact Us
+              {intl.formatMessage({ id: 'AUTH.LAYOUT.CONTACT' })}
             </a>
           </div>
           {/* end::Links */}
@@ -60,38 +62,30 @@ const AuthLayout = () => {
         {/* begin::Content */}
         <div className='d-flex flex-column flex-center py-15 px-5 px-md-15 w-100'>
           {/* begin::Logo */}
-          <Link to='/' className='mb-12'>
+          {/* <Link to='/' className='mb-12'>
             <img alt='Logo' src={toAbsoluteUrl('media/logos/custom-1.png')} className='h-75px' />
-          </Link>
+          </Link> */}
           {/* end::Logo */}
 
           {/* begin::Image */}
-          <img
+          {/* <img
             className='mx-auto w-275px w-md-50 w-xl-500px mb-10 mb-lg-20'
             src={toAbsoluteUrl('media/misc/auth-screens.png')}
             alt=''
-          />
+          /> */}
           {/* end::Image */}
 
           {/* begin::Title */}
           <h1 className='text-white fs-2qx fw-bolder text-center mb-7'>
-            Fast, Efficient and Productive
+            {intl.formatMessage({ id: 'AUTH.LAYOUT.TITLE' })}
           </h1>
           {/* end::Title */}
 
           {/* begin::Text */}
-          <div className='text-white fs-base text-center'>
-            In this kind of post,{' '}
-            <a href='#' className='opacity-75-hover text-warning fw-bold me-1'>
-              the blogger
-            </a>
-            introduces a person they’ve interviewed <br /> and provides some background information
-            about
-            <a href='#' className='opacity-75-hover text-warning fw-bold me-1'>
-              the interviewee
-            </a>
-            and their <br /> work following this is a transcript of the interview.
-          </div>
+          <div
+            className='text-white fs-base text-center'
+            dangerouslySetInnerHTML={{ __html: intl.formatMessage({ id: 'AUTH.LAYOUT.TEXT' }) }}
+          />
           {/* end::Text */}
         </div>
         {/* end::Content */}
@@ -101,4 +95,5 @@ const AuthLayout = () => {
   )
 }
 
-export {AuthLayout}
+export { AuthLayout }
+

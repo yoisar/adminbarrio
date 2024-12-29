@@ -1,12 +1,12 @@
-
-import {useState} from 'react'
-import * as Yup from 'yup'
 import clsx from 'clsx'
-import {Link} from 'react-router-dom'
-import {useFormik} from 'formik'
-import {getUserByToken, login} from '../core/_requests'
-import {toAbsoluteUrl} from '../../../../_metronic/helpers'
-import {useAuth} from '../core/Auth'
+import { useFormik } from 'formik'
+import { useState } from 'react'
+import { useIntl } from 'react-intl'
+import { Link } from 'react-router-dom'
+import * as Yup from 'yup'
+import { toAbsoluteUrl } from '../../../../_metronic/helpers'
+import { getUserByToken, login } from '../core/_requests'
+import { useAuth } from '../core/Auth'
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
@@ -33,22 +33,23 @@ const initialValues = {
 
 export function Login() {
   const [loading, setLoading] = useState(false)
-  const {saveAuth, setCurrentUser} = useAuth()
+  const { saveAuth, setCurrentUser } = useAuth()
+  const intl = useIntl()
 
   const formik = useFormik({
     initialValues,
     validationSchema: loginSchema,
-    onSubmit: async (values, {setStatus, setSubmitting}) => {
+    onSubmit: async (values, { setStatus, setSubmitting }) => {
       setLoading(true)
       try {
-        const {data: auth} = await login(values.email, values.password)
+        const { data: auth } = await login(values.email, values.password)
         saveAuth(auth)
-        const {data: user} = await getUserByToken(auth.api_token)
+        const { data: user } = await getUserByToken(auth.api_token)
         setCurrentUser(user)
       } catch (error) {
         console.error(error)
         saveAuth(undefined)
-        setStatus('The login details are incorrect')
+        setStatus(intl.formatMessage({ id: 'AUTH.VALIDATION.INVALID_LOGIN' }))
         setSubmitting(false)
         setLoading(false)
       }
@@ -64,61 +65,16 @@ export function Login() {
     >
       {/* begin::Heading */}
       <div className='text-center mb-11'>
-        <h1 className='text-gray-900 fw-bolder mb-3'>Sign In</h1>
-        <div className='text-gray-500 fw-semibold fs-6'>Your Social Campaigns</div>
+        <Link to='/'>
+          <img alt='Logo' src={toAbsoluteUrl('/media/logos/custom-1.png')} className='h-75px mb-5' />
+        </Link>
+        <h1 className='text-gray-900 fw-bolder mb-3'>
+          {intl.formatMessage({ id: 'AUTH.LOGIN.TITLE' })}
+        </h1>        
       </div>
       {/* begin::Heading */}
 
-      {/* begin::Login options */}
-      <div className='row g-3 mb-9'>
-        {/* begin::Col */}
-        <div className='col-md-6'>
-          {/* begin::Google link */}
-          <a
-            href='#'
-            className='btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100'
-          >
-            <img
-              alt='Logo'
-              src={toAbsoluteUrl('media/svg/brand-logos/google-icon.svg')}
-              className='h-15px me-3'
-            />
-            Sign in with Google
-          </a>
-          {/* end::Google link */}
-        </div>
-        {/* end::Col */}
-
-        {/* begin::Col */}
-        <div className='col-md-6'>
-          {/* begin::Google link */}
-          <a
-            href='#'
-            className='btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100'
-          >
-            <img
-              alt='Logo'
-              src={toAbsoluteUrl('media/svg/brand-logos/apple-black.svg')}
-              className='theme-light-show h-15px me-3'
-            />
-            <img
-              alt='Logo'
-              src={toAbsoluteUrl('media/svg/brand-logos/apple-black-dark.svg')}
-              className='theme-dark-show h-15px me-3'
-            />
-            Sign in with Apple
-          </a>
-          {/* end::Google link */}
-        </div>
-        {/* end::Col */}
-      </div>
-      {/* end::Login options */}
-
-      {/* begin::Separator */}
-      <div className='separator separator-content my-14'>
-        <span className='w-125px text-gray-500 fw-semibold fs-7'>Or with email</span>
-      </div>
-      {/* end::Separator */}
+      {/* <LoginOptions /> */}
 
       {formik.status ? (
         <div className='mb-lg-15 alert alert-danger'>
@@ -127,21 +83,24 @@ export function Login() {
       ) : (
         <div className='mb-10 bg-light-info p-8 rounded'>
           <div className='text-info'>
-            Use account <strong>admin@demo.com</strong> and password <strong>demo</strong> to
-            continue.
+            {intl.formatMessage({ id: 'AUTH.LOGIN.USE_ACCOUNT' })}{' '}
+            <strong>admin@demo.com</strong> {intl.formatMessage({ id: 'AUTH.LOGIN.AND_PASSWORD' })}{' '}
+            <strong>demo</strong> {intl.formatMessage({ id: 'AUTH.LOGIN.TO_CONTINUE' })}
           </div>
         </div>
       )}
 
       {/* begin::Form group */}
       <div className='fv-row mb-8'>
-        <label className='form-label fs-6 fw-bolder text-gray-900'>Email</label>
+        <label className='form-label fs-6 fw-bolder text-gray-900'>
+          {intl.formatMessage({ id: 'AUTH.INPUT.EMAIL' })}
+        </label>
         <input
-          placeholder='Email'
+          placeholder={intl.formatMessage({ id: 'AUTH.INPUT.EMAIL' })}
           {...formik.getFieldProps('email')}
           className={clsx(
             'form-control bg-transparent',
-            {'is-invalid': formik.touched.email && formik.errors.email},
+            { 'is-invalid': formik.touched.email && formik.errors.email },
             {
               'is-valid': formik.touched.email && !formik.errors.email,
             }
@@ -160,7 +119,9 @@ export function Login() {
 
       {/* begin::Form group */}
       <div className='fv-row mb-3'>
-        <label className='form-label fw-bolder text-gray-900 fs-6 mb-0'>Password</label>
+        <label className='form-label fw-bolder text-gray-900 fs-6 mb-0'>
+          {intl.formatMessage({ id: 'AUTH.INPUT.PASSWORD' })}
+        </label>
         <input
           type='password'
           autoComplete='off'
@@ -191,7 +152,7 @@ export function Login() {
 
         {/* begin::Link */}
         <Link to='/auth/forgot-password' className='link-primary'>
-          Forgot Password ?
+          {intl.formatMessage({ id: 'AUTH.LOGIN.FORGOT_PASSWORD' })}
         </Link>
         {/* end::Link */}
       </div>
@@ -205,10 +166,10 @@ export function Login() {
           className='btn btn-primary'
           disabled={formik.isSubmitting || !formik.isValid}
         >
-          {!loading && <span className='indicator-label'>Continue</span>}
+          {!loading && <span className='indicator-label'>{intl.formatMessage({ id: 'AUTH.LOGIN.CONTINUE' })}</span>}
           {loading && (
-            <span className='indicator-progress' style={{display: 'block'}}>
-              Please wait...
+            <span className='indicator-progress' style={{ display: 'block' }}>
+              {intl.formatMessage({ id: 'AUTH.LOGIN.PLEASE_WAIT' })}
               <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
             </span>
           )}
@@ -217,9 +178,9 @@ export function Login() {
       {/* end::Action */}
 
       <div className='text-gray-500 text-center fw-semibold fs-6'>
-        Not a Member yet?{' '}
+        {intl.formatMessage({ id: 'AUTH.LOGIN.NOT_A_MEMBER' })}{' '}
         <Link to='/auth/registration' className='link-primary'>
-          Sign up
+          {intl.formatMessage({ id: 'AUTH.LOGIN.SIGN_UP' })}
         </Link>
       </div>
     </form>
