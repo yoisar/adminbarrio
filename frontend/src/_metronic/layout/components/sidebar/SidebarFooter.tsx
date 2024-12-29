@@ -1,5 +1,4 @@
-
-import {KTIcon} from '../../../helpers'
+import { KTIcon } from '../../../helpers'
 
 const SidebarFooter = () => {
   return (
@@ -11,13 +10,26 @@ const SidebarFooter = () => {
         data-bs-toggle='tooltip'
         data-bs-trigger='hover'
         data-bs-dismiss-='click'
-        title='Metronic Docs & Components'
+        title='AdminBarrio Docs & Components'
       >
-        <span className='btn-label'>Docs & Components</span>
+        <span className='btn-label'>AdminBarrio Docs & Components</span>
         <KTIcon iconName='document' className='btn-icon fs-2 m-0' />
+      </a>
+      <a
+        href='https://adminbarrio.com/contact'
+        target='_blank'
+        className='btn btn-flex flex-center btn-custom btn-secondary overflow-hidden text-nowrap px-0 h-40px w-100 mt-2'
+        data-bs-toggle='tooltip'
+        data-bs-trigger='hover'
+        data-bs-dismiss-='click'
+        title='Contact Support'
+      >
+        <span className='btn-label'>Contact Support</span>
+        <KTIcon iconName='support' className='btn-icon fs-2 m-0' />
       </a>
     </div>
   )
 }
 
-export {SidebarFooter}
+export { SidebarFooter }
+

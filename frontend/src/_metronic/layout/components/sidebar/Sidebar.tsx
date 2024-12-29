@@ -1,10 +1,10 @@
 /* eslint-disable no-prototype-builtins */
 import clsx from 'clsx'
-import {useEffect, useRef} from 'react'
-import {ILayout, useLayout} from '../../core'
-import {SidebarMenu} from './sidebar-menu/SidebarMenu'
-import {SidebarFooter} from './SidebarFooter'
-import {SidebarLogo} from './SidebarLogo'
+import { useEffect, useRef } from 'react'
+import { ILayout, useLayout } from '../../core'
+import { SidebarLogo } from './SidebarLogo'
+import { SidebarMenu } from './sidebar-menu/SidebarMenu'
+import { SidebarFooter } from './SidebarFooter'
 
 const Sidebar = () => {
   const {config} = useLayout()
@@ -138,4 +138,5 @@ const updateDOM = (config: ILayout) => {
   }
 }
 
-export {Sidebar}
+export { Sidebar }
+
