@@ -55,3 +55,25 @@ export const updateExpensa = async (id: number, expensaData: Expensa): Promise<E
         throw error;
     }
 };
+
+// Obtener el total de expensas
+export const fetchTotalExpensas = async (): Promise<number> => {
+    try {
+        const response = await api.get("/expensas/total");
+        return response.data.total;
+    } catch (error) {
+        console.error("Error fetching total expensas:", error);
+        throw error;
+    }
+};
+
+// Obtener el total de cobros realizados
+export const fetchTotalCobros = async (): Promise<number> => {
+    try {
+        const response = await api.get("/cobros/total");
+        return response.data.total;
+    } catch (error) {
+        console.error("Error fetching total cobros:", error);
+        throw error;
+    }
+};

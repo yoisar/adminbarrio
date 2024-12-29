@@ -1,6 +1,6 @@
 // import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import { Route, Routes } from 'react-router-dom'
-import Expensas from '../modules/adminbarrio/components/Expensas'
+import Expensas from '../modules/adminbarrio/components/expensas/Expensas'
 import { DashboardWrapper } from '../pages/dashboard/DashboardWrapper'
 // import AccesoSeguro from './pages/AccesoSeguro'
 // import AnalisisGastos from './pages/AnalisisGastos'

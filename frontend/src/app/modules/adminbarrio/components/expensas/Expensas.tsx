@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
-import { KTSVG } from '../../../../_metronic/helpers'
-import { PageTitle } from '../../../../_metronic/layout/core'
-import { createExpensa, Expensa, fetchExpensas, updateExpensa } from '../services/expensasService'
+import React, { useEffect, useState } from 'react'
+import { Modal } from 'react-bootstrap'
+import { KTSVG } from '../../../../../_metronic/helpers'
+import { PageTitle } from '../../../../../_metronic/layout/core'
+import { createExpensa, Expensa, fetchExpensas, updateExpensa } from '../../services/expensasService'
 
 const Expensas = () => {
   const [expensas, setExpensas] = useState<Expensa[]>([])
@@ -12,6 +13,7 @@ const Expensas = () => {
     saldo_anterior: 0,
     monto_pagado: 0,
   })
+  const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
     const getExpensas = async () => {
@@ -43,6 +45,7 @@ const Expensas = () => {
       setExpensas(data)
       setNewExpensa({ fecha_vencimiento: '', total: 0, saldo_anterior: 0, monto_pagado: 0 })
       setEditingExpensa(null)
+      setShowModal(false)
     } catch (error) {
       console.error('Error saving expensa:', error)
     }
@@ -51,6 +54,13 @@ const Expensas = () => {
   const handleEdit = (expensa: Expensa) => {
     setEditingExpensa(expensa)
     setNewExpensa(expensa)
+    setShowModal(true)
+  }
+
+  const handleAdd = () => {
+    setEditingExpensa(null)
+    setNewExpensa({ fecha_vencimiento: '', total: 0, saldo_anterior: 0, monto_pagado: 0 })
+    setShowModal(true)
   }
 
   return (
@@ -69,69 +79,13 @@ const Expensas = () => {
               />
             </div>
           </div>
+          <div className='card-toolbar'>
+            <button className='btn btn-primary' onClick={handleAdd}>
+              Agregar Expensa
+            </button>
+          </div>
         </div>
         <div className='card-body py-4'>
-          <form onSubmit={handleSubmit}>
-            <div className='row mb-6'>
-              <label className='col-lg-2 col-form-label required fw-bold fs-6'>Fecha de Vencimiento</label>
-              <div className='col-lg-4'>
-                <input
-                  type='date'
-                  name='fecha_vencimiento'
-                  value={newExpensa.fecha_vencimiento}
-                  onChange={handleInputChange}
-                  className='form-control form-control-lg form-control-solid'
-                  required
-                />
-              </div>
-            </div>
-            <div className='row mb-6'>
-              <label className='col-lg-2 col-form-label required fw-bold fs-6'>Total</label>
-              <div className='col-lg-4'>
-                <input
-                  type='number'
-                  name='total'
-                  value={newExpensa.total}
-                  onChange={handleInputChange}
-                  className='form-control form-control-lg form-control-solid'
-                  required
-                />
-              </div>
-            </div>
-            <div className='row mb-6'>
-              <label className='col-lg-2 col-form-label required fw-bold fs-6'>Saldo Anterior</label>
-              <div className='col-lg-4'>
-                <input
-                  type='number'
-                  name='saldo_anterior'
-                  value={newExpensa.saldo_anterior}
-                  onChange={handleInputChange}
-                  className='form-control form-control-lg form-control-solid'
-                  required
-                />
-              </div>
-            </div>
-            <div className='row mb-6'>
-              <label className='col-lg-2 col-form-label required fw-bold fs-6'>Monto Pagado</label>
-              <div className='col-lg-4'>
-                <input
-                  type='number'
-                  name='monto_pagado'
-                  value={newExpensa.monto_pagado}
-                  onChange={handleInputChange}
-                  className='form-control form-control-lg form-control-solid'
-                  required
-                />
-              </div>
-            </div>
-            <div className='row mb-6'>
-              <div className='col-lg-4 offset-lg-2'>
-                <button type='submit' className='btn btn-primary'>
-                  {editingExpensa ? 'Actualizar Expensa' : 'Agregar Expensa'}
-                </button>
-              </div>
-            </div>
-          </form>
           <div className='table-responsive'>
             <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
               <thead>
@@ -171,6 +125,68 @@ const Expensas = () => {
           </div>
         </div>
       </div>
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>{editingExpensa ? 'Editar Expensa' : 'Agregar Expensa'}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form onSubmit={handleSubmit}>
+            <div className='mb-3'>
+              <label className='form-label'>Fecha de Vencimiento</label>
+              <input
+                type='date'
+                name='fecha_vencimiento'
+                value={newExpensa.fecha_vencimiento}
+                onChange={handleInputChange}
+                className='form-control'
+                required
+              />
+            </div>
+            <div className='mb-3'>
+              <label className='form-label'>Total</label>
+              <input
+                type='number'
+                name='total'
+                value={newExpensa.total}
+                onChange={handleInputChange}
+                className='form-control'
+                required
+              />
+            </div>
+            <div className='mb-3'>
+              <label className='form-label'>Saldo Anterior</label>
+              <input
+                type='number'
+                name='saldo_anterior'
+                value={newExpensa.saldo_anterior}
+                onChange={handleInputChange}
+                className='form-control'
+                required
+              />
+            </div>
+            <div className='mb-3'>
+              <label className='form-label'>Monto Pagado</label>
+              <input
+                type='number'
+                name='monto_pagado'
+                value={newExpensa.monto_pagado}
+                onChange={handleInputChange}
+                className='form-control'
+                required
+              />
+            </div>
+            <div className='d-flex justify-content-end'>
+              <button type='button' className='btn btn-secondary me-2' onClick={() => setShowModal(false)}>
+                Cancelar
+              </button>
+              <button type='submit' className='btn btn-primary'>
+                {editingExpensa ? 'Actualizar' : 'Agregar'}
+              </button>
+            </div>
+          </form>
+        </Modal.Body>
+      </Modal>
     </>
   )
 }
