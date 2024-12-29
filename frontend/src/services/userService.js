@@ -19,3 +19,8 @@ export const createUser = async (userData) => {
         throw error;
     }
 };
+
+export const getUsersWithRoleUser = async () => {
+    const response = await api.get('/users/role/user');
+    return response.data;
+};

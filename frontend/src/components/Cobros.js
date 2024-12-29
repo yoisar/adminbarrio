@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { createCobro, fetchCobros, fetchMorosos } from "../services/cobrosService";
+import { fetchExpensas } from "../services/expensasService";
+import { getUsersWithRoleUser } from "../services/userService";
 
 const Cobros = () => {
     const [cobros, setCobros] = useState([]);
     const [morosos, setMorosos] = useState([]);
+    const [usuarios, setUsuarios] = useState([]);
+    const [expensas, setExpensas] = useState([]);
     const [newCobro, setNewCobro] = useState({
         user_id: "",
         expensa_id: "",
@@ -12,14 +16,19 @@ const Cobros = () => {
     });
     const [error, setError] = useState(null);
 
-    // Cargar cobros al montar el componente
+    // Cargar datos al montar el componente
     useEffect(() => {
         const getCobros = async () => {
             try {
+                const usuariosData = await getUsersWithRoleUser();
+                setUsuarios(usuariosData);
+                const expensasData = await fetchExpensas();
+                setExpensas(expensasData);
                 const cobrosData = await fetchCobros();
                 setCobros(cobrosData);
                 const morososData = await fetchMorosos();
                 setMorosos(morososData);
+                
             } catch (err) {
                 setError(err.message);
             }
@@ -56,24 +65,36 @@ const Cobros = () => {
             <form onSubmit={handleSubmit}>
                 <h2>Registrar Cobro</h2>
                 <div>
-                    <label>Usuario ID:</label>
-                    <input
-                        type="number"
+                    <label>Usuario:</label>
+                    <select
                         name="user_id"
                         value={newCobro.user_id}
                         onChange={handleChange}
                         required
-                    />
+                    >
+                        <option value="">Seleccione un usuario</option>
+                        {usuarios.map((usuario) => (
+                            <option key={usuario.id} value={usuario.id}>
+                                {usuario.name}
+                            </option>
+                        ))}
+                    </select>
                 </div>
                 <div>
-                    <label>Expensa ID:</label>
-                    <input
-                        type="number"
+                    <label>Expensa:</label>
+                    <select
                         name="expensa_id"
                         value={newCobro.expensa_id}
                         onChange={handleChange}
                         required
-                    />
+                    >
+                        <option value="">Seleccione una expensa</option>
+                        {expensas.map((expensa) => (
+                            <option key={expensa.id} value={expensa.id}>
+                                {expensa.detalle} - {expensa.fecha_vencimiento}
+                            </option>
+                        ))}
+                    </select>
                 </div>
                 <div>
                     <label>Monto Pagado:</label>
@@ -103,7 +124,7 @@ const Cobros = () => {
             <ul>
                 {cobros.map((cobro) => (
                     <li key={cobro.id}>
-                        Usuario: {cobro.user?.name} - Expensa: {cobro.expensa_id} - Monto: ${cobro.monto_pagado} - Fecha: {cobro.fecha_pago}
+                        Usuario: {cobro.user?.name} - Expensa: {cobro.expensa?.detalle} - Monto: ${cobro.monto_pagado} - Fecha: {cobro.fecha_pago}
                     </li>
                 ))}
             </ul>

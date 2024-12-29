@@ -10,28 +10,32 @@ class ExpensasController extends Controller
     // Listar todas las expensas
     public function index()
     {
-        $expensas = Expensa::all();
+                $expensas = Expensa::all();
         return response()->json($expensas);
+    }
+
+    // Mostrar una expensa específica
+    public function show($id)
+    {
+        $expensa = Expensa::with('gastos.categoria')->findOrFail($id);
+        return response()->json([
+            'expensa' => $expensa,
+            'total_gastos' => $expensa->calcularTotalGastos(),
+            'saldo_pendiente' => $expensa->calcularSaldoPendiente(),
+        ]);
     }
 
     // Crear una nueva expensa
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'monto_total' => 'required|numeric',
-            'fecha' => 'required|date',
+            'total' => 'required|numeric',
+            'fecha_vencimiento' => 'required|date',
             'detalle' => 'required|string|max:255',
         ]);
 
         $expensa = Expensa::create($validatedData);
         return response()->json($expensa, 201);
-    }
-
-    // Mostrar una expensa específica
-    public function show($id)
-    {
-        $expensa = Expensa::findOrFail($id);
-        return response()->json($expensa);
     }
 
     // Actualizar una expensa
@@ -40,8 +44,8 @@ class ExpensasController extends Controller
         $expensa = Expensa::findOrFail($id);
 
         $validatedData = $request->validate([
-            'monto_total' => 'sometimes|required|numeric',
-            'fecha' => 'sometimes|required|date',
+            'total' => 'sometimes|required|numeric',
+            'fecha_vencimiento' => 'sometimes|required|date',
             'detalle' => 'sometimes|required|string|max:255',
         ]);
 

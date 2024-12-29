@@ -16,7 +16,7 @@ class DashboardController extends Controller
         $totalGastos = Gasto::sum('monto');
 
         // Obtener el total de expensas
-        $totalExpensas = Expensa::sum('monto_total');
+        $totalExpensas = Expensa::sum('total');
 
         // Obtener el total de cobros
         $totalCobros = Cobro::sum('monto_pagado');

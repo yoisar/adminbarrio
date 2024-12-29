@@ -8,7 +8,8 @@ use App\Http\Controllers\{
     ExpensasController,
     CobrosController,
     UserController,
-    UserProfileController
+    UserProfileController,
+    CategoriaGastoController
 };
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -30,7 +31,9 @@ Route::middleware('api')->group(function () {
     Route::apiResource('gastos', GastosController::class);
     Route::apiResource('expensas', ExpensasController::class);
     Route::apiResource('cobros', CobrosController::class);
+    Route::apiResource('categorias', CategoriaGastoController::class);
     Route::get('/cobros/morosos', [CobrosController::class, 'morosos']);
+    Route::get('/users/role/user', [UserController::class, 'listUsers']); // Endpoint para listar usuarios con rol 'user'
     Route::post('/login', function (Request $request) {
         $credentials = $request->validate([
             'email' => 'required|email',

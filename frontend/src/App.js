@@ -17,6 +17,9 @@ const App = () => {
                         <Link to="/expensas">Expensas</Link>
                     </li>
                     <li>
+                        <Link to="/expensas-lista">Lista expensas</Link>
+                    </li>
+                    <li>
                         <Link to="/cobros">Cobros</Link>
                     </li>
                 </ul>

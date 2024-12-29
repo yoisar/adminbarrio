@@ -10,7 +10,7 @@ class GastosController extends Controller
     // Listar todos los gastos
     public function index()
     {
-        $gastos = Gasto::all();
+        $gastos = Gasto::with('categoria')->get();
         return response()->json($gastos);
     }
 
@@ -18,9 +18,9 @@ class GastosController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
+            'categoria_gasto_id' => 'required|exists:categoria_gastos,id',
             'descripcion' => 'required|string|max:255',
             'monto' => 'required|numeric',
-            'tipo' => 'required|in:fijo,variable,extraordinario',
             'fecha' => 'required|date',
         ]);
 
@@ -31,7 +31,7 @@ class GastosController extends Controller
     // Mostrar un gasto específico
     public function show($id)
     {
-        $gasto = Gasto::findOrFail($id);
+        $gasto = Gasto::with('categoria')->findOrFail($id);
         return response()->json($gasto);
     }
 
@@ -41,9 +41,9 @@ class GastosController extends Controller
         $gasto = Gasto::findOrFail($id);
 
         $validatedData = $request->validate([
+            'categoria_gasto_id' => 'sometimes|required|exists:categoria_gastos,id',
             'descripcion' => 'sometimes|required|string|max:255',
             'monto' => 'sometimes|required|numeric',
-            'tipo' => 'sometimes|required|in:fijo,variable,extraordinario',
             'fecha' => 'sometimes|required|date',
         ]);
 

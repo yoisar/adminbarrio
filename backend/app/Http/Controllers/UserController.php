@@ -71,4 +71,11 @@ class UserController extends Controller
 
         return response()->json(null, 204);
     }
+
+    // Listar usuarios con rol 'user'
+    public function listUsers()
+    {
+        $users = User::where('role', 'user')->get();
+        return response()->json($users);
+    }
 }

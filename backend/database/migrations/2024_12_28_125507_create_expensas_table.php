@@ -10,9 +10,10 @@ class CreateExpensasTable extends Migration
     {
         Schema::create('expensas', function (Blueprint $table) {
             $table->id();
-            $table->decimal('monto_total', 10, 2);
-            $table->date('fecha');
-            $table->string('detalle')->nullable();
+            $table->date('fecha_vencimiento');
+            $table->decimal('total', 10, 2); // Total de la expensa
+            $table->decimal('saldo_anterior', 10, 2)->default(0);
+            $table->decimal('monto_pagado', 10, 2)->default(0);
             $table->timestamps();
         });
     }

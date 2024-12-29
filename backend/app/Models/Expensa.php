@@ -9,19 +9,31 @@ class Expensa extends Model
 {
     use HasFactory;
 
-    // Nombre de la tabla (opcional si sigue la convención de Laravel)
-    protected $table = 'expensas';
-
-    // Atributos que se pueden asignar en masa
     protected $fillable = [
-        'monto_total',
-        'fecha',
-        'detalle',
+        'fecha_vencimiento',
+        'total',
+        'saldo_anterior',
+        'monto_pagado',
     ];
+
+    public function gastos()
+    {
+        return $this->hasMany(Gasto::class);
+    }
 
     // Relación con Cobros (una expensa puede tener múltiples cobros)
     public function cobros()
     {
         return $this->hasMany(Cobro::class);
+    }
+
+    public function calcularTotalGastos()
+    {
+        return $this->gastos->sum('monto');
+    }
+
+    public function calcularSaldoPendiente()
+    {
+        return $this->total - $this->monto_pagado;
     }
 }
