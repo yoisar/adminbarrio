@@ -1,4 +1,4 @@
-import api from "../api";
+import api from "./api";
 
 // Obtener todos los cobros
 export const fetchCobros = async () => {

@@ -31,7 +31,7 @@ class ExpensasController extends Controller
         $validatedData = $request->validate([
             'total' => 'required|numeric',
             'fecha_vencimiento' => 'required|date',
-            'detalle' => 'required|string|max:255',
+            // 'detalle' => 'required|string|max:255',
         ]);
 
         $expensa = Expensa::create($validatedData);

@@ -1,12 +1,14 @@
-import {lazy, FC, Suspense} from 'react'
-import {Route, Routes, Navigate} from 'react-router-dom'
-import {MasterLayout} from '../../_metronic/layout/MasterLayout'
+import { FC, lazy, Suspense } from 'react'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import TopBarProgress from 'react-topbar-progress-indicator'
-import {DashboardWrapper} from '../pages/dashboard/DashboardWrapper'
-import {MenuTestPage} from '../pages/MenuTestPage'
-import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
-import {WithChildren} from '../../_metronic/helpers'
+import { getCSSVariableValue } from '../../_metronic/assets/ts/_utils'
+import { WithChildren } from '../../_metronic/helpers'
+import { MasterLayout } from '../../_metronic/layout/MasterLayout'
+import { DashboardWrapper } from '../pages/dashboard/DashboardWrapper'
 import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
+import { MenuTestPage } from '../pages/MenuTestPage'
+import AdminBarrioRoutes from './AdminBarrioRoutes'
+// import AdminBarrioRoutes from './AdminBarrioRoutes'
 
 const PrivateRoutes = () => {
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
@@ -74,6 +76,8 @@ const PrivateRoutes = () => {
             </SuspensedView>
           }
         />
+        {/* AdminBarrio Routes */}
+        <Route path='/*' element={<AdminBarrioRoutes />} />
         {/* Page Not Found */}
         <Route path='*' element={<Navigate to='/error/404' />} />
       </Route>
@@ -93,4 +97,5 @@ const SuspensedView: FC<WithChildren> = ({children}) => {
   return <Suspense fallback={<TopBarProgress />}>{children}</Suspense>
 }
 
-export {PrivateRoutes}
+export { PrivateRoutes }
+

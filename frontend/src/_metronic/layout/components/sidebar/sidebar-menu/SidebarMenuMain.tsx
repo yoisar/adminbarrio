@@ -12,9 +12,38 @@ const SidebarMenuMain = () => {
         title={intl.formatMessage({id: 'MENU.DASHBOARD'})}
         fontIcon='bi-app-indicator'
       />
+
       <div className='menu-item'>
         <div className='menu-content pt-8 pb-2'>
-          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Gestión de Comunicación</span>
+          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Financiera</span>
+        </div>
+      </div>
+      <SidebarMenuItem to='/expensas' icon='cash' title='Expensas' fontIcon='bi-cash' />
+      <SidebarMenuItem to='/presupuestos' icon='graph-up' title='Presupuestos' fontIcon='bi-graph-up' />
+      <SidebarMenuItem to='/gastos' icon='wallet' title='Gastos' fontIcon='bi-wallet' />
+      <SidebarMenuItem to='/cobros' icon='credit-card' title='Cobros' fontIcon='bi-credit-card' />
+
+      <div className='menu-item'>
+        <div className='menu-content pt-8 pb-2'>
+          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Servicios</span>
+        </div>
+      </div>
+      <SidebarMenuItem to='/mantenimiento' icon='tools' title='Mantenimiento' fontIcon='bi-tools' />
+      <SidebarMenuItem to='/historial-reparaciones' icon='clock-history' title='Historial de Reparaciones' fontIcon='bi-clock-history' />
+      <SidebarMenuItem to='/solicitudes-mantenimiento' icon='file-earmark' title='Solicitudes de Mantenimiento' fontIcon='bi-file-earmark' />
+
+      <div className='menu-item'>
+        <div className='menu-content pt-8 pb-2'>
+          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Áreas Comunes</span>
+        </div>
+      </div>
+      <SidebarMenuItem to='/reservas' icon='calendar-check' title='Reservas' fontIcon='bi-calendar-check' />
+      <SidebarMenuItem to='/reglamentos' icon='book' title='Reglamentos' fontIcon='bi-book' />
+      <SidebarMenuItem to='/control-acceso-areas' icon='shield-check' title='Control de Acceso' fontIcon='bi-shield-check' />
+
+      <div className='menu-item'>
+        <div className='menu-content pt-8 pb-2'>
+          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Comunicación</span>
         </div>
       </div>
       <SidebarMenuItem to='/notificaciones' icon='bell' title='Notificaciones' fontIcon='bi-bell' />
@@ -23,7 +52,7 @@ const SidebarMenuMain = () => {
 
       <div className='menu-item'>
         <div className='menu-content pt-8 pb-2'>
-          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Gestión de Seguridad</span>
+          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Seguridad</span>
         </div>
       </div>
       <SidebarMenuItem to='/control-acceso' icon='shield' title='Control de Acceso' fontIcon='bi-shield' />
@@ -33,38 +62,12 @@ const SidebarMenuMain = () => {
 
       <div className='menu-item'>
         <div className='menu-content pt-8 pb-2'>
-          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Gestión de Fumigación</span>
+          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Fumigación</span>
         </div>
       </div>
       <SidebarMenuItem to='/planificacion-fumigaciones' icon='calendar' title='Planificación de Fumigaciones' fontIcon='bi-calendar' />
       <SidebarMenuItem to='/notificaciones-fumigacion' icon='bell' title='Notificaciones y Alertas' fontIcon='bi-bell' />
       <SidebarMenuItem to='/seguimiento-fumigacion' icon='check-circle' title='Seguimiento y Reportes' fontIcon='bi-check-circle' />
-
-      <div className='menu-item'>
-        <div className='menu-content pt-8 pb-2'>
-          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Gestión de Servicios Básicos</span>
-        </div>
-      </div>
-      <SidebarMenuItem to='/mantenimiento' icon='tools' title='Mantenimiento' fontIcon='bi-tools' />
-      <SidebarMenuItem to='/historial-reparaciones' icon='clock-history' title='Historial de Reparaciones' fontIcon='bi-clock-history' />
-      <SidebarMenuItem to='/solicitudes-mantenimiento' icon='file-earmark' title='Solicitudes de Mantenimiento' fontIcon='bi-file-earmark' />
-
-      <div className='menu-item'>
-        <div className='menu-content pt-8 pb-2'>
-          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Gestión de Áreas Comunes</span>
-        </div>
-      </div>
-      <SidebarMenuItem to='/reservas' icon='calendar-check' title='Reservas' fontIcon='bi-calendar-check' />
-      <SidebarMenuItem to='/reglamentos' icon='book' title='Reglamentos' fontIcon='bi-book' />
-      <SidebarMenuItem to='/control-acceso-areas' icon='shield-check' title='Control de Acceso' fontIcon='bi-shield-check' />
-
-      <div className='menu-item'>
-        <div className='menu-content pt-8 pb-2'>
-          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Gestión Financiera</span>
-        </div>
-      </div>
-      <SidebarMenuItem to='/expensas' icon='cash' title='Expensas' fontIcon='bi-cash' />
-      <SidebarMenuItem to='/presupuestos' icon='graph-up' title='Presupuestos' fontIcon='bi-graph-up' />
 
       <div className='menu-item'>
         <div className='menu-content pt-8 pb-2'>
@@ -86,7 +89,7 @@ const SidebarMenuMain = () => {
 
       <div className='menu-item'>
         <div className='menu-content pt-8 pb-2'>
-          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Gestión de Seguridad Digital</span>
+          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Seguridad Digital</span>
         </div>
       </div>
       <SidebarMenuItem to='/perfiles-usuario' icon='person' title='Perfiles de Usuario' fontIcon='bi-person' />

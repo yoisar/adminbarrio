@@ -2,7 +2,8 @@ import axios from "axios";
 
 // Crear una instancia de Axios para la API
 const api = axios.create({
-    baseURL: process.env.REACT_APP_API_URL || "http://localhost:8010/api", // URL base del backend Laravel
+    // const API_URL = import.meta.env.VITE_APP_API_URL;
+    baseURL: import.meta.env.VITE_APP_API_URL || "http://localhost:8010/api", // URL base del backend Laravel
     headers: {
         "Content-Type": "application/json",
         Accept: "application/json",

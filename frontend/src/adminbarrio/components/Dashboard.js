@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchDashboardMetrics } from "../services/dashboardService";
+import { fetchDashboardMetrics } from "../../app/modules/adminbarrio/services/dashboardService";
 
 const Dashboard = () => {
     const [metrics, setMetrics] = useState({});
