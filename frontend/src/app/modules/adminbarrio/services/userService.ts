@@ -8,6 +8,7 @@ export interface User {
     created_at: string;
     updated_at: string;
     role: string;
+    avatar: string | null; // Permitir nulo para el avatar
 }
 
 // Obtener todos los usuarios
@@ -39,6 +40,17 @@ export const getUsersWithRoleUser = async (): Promise<User[]> => {
         return response.data;
     } catch (error) {
         console.error("Error fetching users with role 'user':", error);
+        throw error;
+    }
+};
+
+// Obtener la cantidad de usuarios
+export const getUserCount = async (): Promise<number> => {
+    try {
+        const response = await api.get('/users/count');
+        return response.data.count;
+    } catch (error) {
+        console.error("Error fetching user count:", error);
         throw error;
     }
 };

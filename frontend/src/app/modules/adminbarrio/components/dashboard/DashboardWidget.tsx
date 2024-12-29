@@ -75,7 +75,7 @@ const DashboardWidget: FC<Props> = ({
           <div className='d-flex align-items-center'>
             <span className='fs-4 fw-semibold text-gray-500 me-1 align-self-start'>$</span>
             <span className='fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2'>
-              {isNaN(totalExpensas) ? '0.00' : totalExpensas.toFixed(2)}
+              {isNaN(totalExpensas) ? '0.00' : Number(totalExpensas).toFixed(2)}
             </span>
             <span className='badge badge-light-success fs-base'>
               <KTIcon iconName='arrow-up' className='fs-5 text-success ms-n1' /> 2.2%
@@ -101,14 +101,14 @@ const DashboardWidget: FC<Props> = ({
             <div className='bullet w-8px h-3px rounded-2 bg-success me-3'></div>
             <div className='text-gray-500 flex-grow-1 me-4'>Total Gastos</div>
             <div className='fw-bolder text-gray-700 text-xxl-end'>
-              {isNaN(totalGastos) ? '0.00' : totalGastos.toFixed(2)}
+              {isNaN(totalGastos) ? '0.00' : Number(totalGastos).toFixed(2)}
             </div>
           </div>
           <div className='d-flex fw-semibold align-items-center my-3'>
             <div className='bullet w-8px h-3px rounded-2 bg-primary me-3'></div>
             <div className='text-gray-500 flex-grow-1 me-4'>Total Cobros</div>
             <div className='fw-bolder text-gray-700 text-xxl-end'>
-              {isNaN(totalCobros) ? '0.00' : totalCobros.toFixed(2)}
+              {isNaN(totalCobros) ? '0.00' : Number(totalCobros).toFixed(2)}
             </div>
           </div>
           <div className='d-flex fw-semibold align-items-center'>

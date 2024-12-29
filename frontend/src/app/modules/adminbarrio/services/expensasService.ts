@@ -1,6 +1,5 @@
 import api from "./api";
 
-
 // Definir la interfaz para Expensa
 export interface Expensa {
     id?: number;
@@ -52,6 +51,16 @@ export const updateExpensa = async (id: number, expensaData: Expensa): Promise<E
         return response.data;
     } catch (error) {
         console.error("Error updating expensa:", error);
+        throw error;
+    }
+};
+
+// Borrar una expensa existente
+export const deleteExpensa = async (id: number): Promise<void> => {
+    try {
+        await api.delete(`/expensas/${id}`);
+    } catch (error) {
+        console.error("Error deleting expensa:", error);
         throw error;
     }
 };

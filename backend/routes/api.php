@@ -63,4 +63,5 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/users/{id}', [UserController::class, 'show']);
     Route::put('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
+    Route::get('/users/count', [UserController::class, 'countUsers']); // Nuevo endpoint para contar usuarios
 });

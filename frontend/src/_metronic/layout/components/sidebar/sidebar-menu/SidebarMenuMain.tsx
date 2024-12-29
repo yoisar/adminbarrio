@@ -15,7 +15,7 @@ const SidebarMenuMain = () => {
 
       <div className='menu-item'>
         <div className='menu-content pt-8 pb-2'>
-          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Financiera</span>
+          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Finanzas</span>
         </div>
       </div>
       <SidebarMenuItem to='/expensas' icon='cash' title='Expensas' fontIcon='bi-cash' />
@@ -71,7 +71,7 @@ const SidebarMenuMain = () => {
 
       <div className='menu-item'>
         <div className='menu-content pt-8 pb-2'>
-          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Asamblea Virtual y Toma de Decisiones</span>
+          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Asambleas</span>
         </div>
       </div>
       <SidebarMenuItem to='/convocatorias' icon='calendar-event' title='Convocatorias' fontIcon='bi-calendar-event' />
@@ -80,7 +80,7 @@ const SidebarMenuMain = () => {
 
       <div className='menu-item'>
         <div className='menu-content pt-8 pb-2'>
-          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Reportes y Estadísticas</span>
+          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Reportes</span>
         </div>
       </div>
       <SidebarMenuItem to='/analisis-gastos' icon='bar-chart' title='Análisis de Gastos' fontIcon='bi-bar-chart' />

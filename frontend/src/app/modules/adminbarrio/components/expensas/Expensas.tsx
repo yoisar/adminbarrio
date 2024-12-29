@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Modal } from 'react-bootstrap'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 import { KTSVG } from '../../../../../_metronic/helpers'
 import { PageTitle } from '../../../../../_metronic/layout/core'
-import { createExpensa, Expensa, fetchExpensas, updateExpensa } from '../../services/expensasService'
+import { createExpensa, deleteExpensa, Expensa, fetchExpensas, updateExpensa } from '../../services/expensasService'
+
+const MySwal = withReactContent(Swal)
 
 const Expensas = () => {
   const [expensas, setExpensas] = useState<Expensa[]>([])
@@ -63,6 +67,31 @@ const Expensas = () => {
     setShowModal(true)
   }
 
+  const handleDelete = async (id: number) => {
+    MySwal.fire({
+      title: '¿Estás seguro?',
+      text: 'No podrás revertir esto',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, borrar',
+      cancelButtonText: 'No, cancelar',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteExpensa(id)
+          const data = await fetchExpensas()
+          setExpensas(data)
+          MySwal.fire('Borrado', 'La expensa ha sido borrada', 'success')
+        } catch (error) {
+          console.error('Error deleting expensa:', error)
+          MySwal.fire('Error', 'Hubo un error al borrar la expensa', 'error')
+        }
+      }
+    })
+  }
+
   return (
     <>
       <PageTitle breadcrumbs={[]}>Expensas</PageTitle>
@@ -81,7 +110,7 @@ const Expensas = () => {
           </div>
           <div className='card-toolbar'>
             <button className='btn btn-primary' onClick={handleAdd}>
-              Agregar Expensa
+              <i className='bi bi-plus-lg'></i> Agregar Expensa
             </button>
           </div>
         </div>
@@ -109,13 +138,13 @@ const Expensas = () => {
                         onClick={() => handleEdit(expensa)}
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
                       >
-                        <KTSVG path='/media/icons/duotune/art/art005.svg' className='svg-icon-3' />
+                        <i className='bi bi-pencil-fill text-primary'></i>
                       </button>
                       <button
-                        onClick={() => console.log('Eliminar expensa', expensa.id)}
+                        onClick={() => handleDelete(expensa.id!)}
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                       >
-                        <KTSVG path='/media/icons/duotune/general/gen027.svg' className='svg-icon-3' />
+                        <i className='bi bi-trash-fill text-danger'></i>
                       </button>
                     </td>
                   </tr>

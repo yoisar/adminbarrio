@@ -78,4 +78,11 @@ class UserController extends Controller
         $users = User::where('role', 'user')->get();
         return response()->json($users);
     }
+
+    // Contar usuarios con rol 'user'
+    public function countUsers()
+    {
+        $count = User::where('role','=', 'user')->count();
+        return response()->json(['count' => $count]);
+    }
 }
