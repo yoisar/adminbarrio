@@ -4,66 +4,67 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { KTSVG } from '../../../../../_metronic/helpers'
 import { PageTitle } from '../../../../../_metronic/layout/core'
-import { createExpensa, deleteExpensa, Expensa, fetchExpensas, updateExpensa } from '../../services/expensasService'
+import { CargaSocial, createCargaSocial, deleteCargaSocial, fetchCargasSociales, updateCargaSocial } from '../../services/cargasSocialesService'
 
 const MySwal = withReactContent(Swal)
 
-const Expensas = () => {
-  const [expensas, setExpensas] = useState<Expensa[]>([])
-  const [editingExpensa, setEditingExpensa] = useState<Expensa | null>(null)
-  const [newExpensa, setNewExpensa] = useState<Expensa>({
-    fecha_vencimiento: '',
-    total: 0,
-    saldo_anterior: 0,
-    monto_pagado: 0,
+const CargasSociales = () => {
+  const [cargasSociales, setCargasSociales] = useState<CargaSocial[]>([])
+  const [editingCargaSocial, setEditingCargaSocial] = useState<CargaSocial | null>(null)
+  const [newCargaSocial, setNewCargaSocial] = useState<CargaSocial>({
+    id: 0,
+    sueldo_id: 0,
+    monto: 0,
+    descripcion: '',    
   })
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
-    const getExpensas = async () => {
+    const getCargasSociales = async () => {
       try {
-        const data = await fetchExpensas()
-        setExpensas(data)
+        const data = await fetchCargasSociales()
+        setCargasSociales(data)
       } catch (error) {
-        console.error('Error fetching expensas:', error)
+        console.error('Error fetching cargas sociales:', error)
       }
     }
 
-    getExpensas()
+    getCargasSociales()
   }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setNewExpensa({ ...newExpensa, [name]: value })
+    setNewCargaSocial({ ...newCargaSocial, [name]: value })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      if (editingExpensa) {
-        await updateExpensa(editingExpensa.id!, newExpensa)
+      if (editingCargaSocial) {
+        await updateCargaSocial(editingCargaSocial.id!, newCargaSocial)
       } else {
-        await createExpensa(newExpensa)
+        await createCargaSocial(newCargaSocial)
+        setNewCargaSocial({ id: undefined, sueldo_id: 0, monto: 0, descripcion: '', created_at: undefined, updated_at: undefined })
+        const data = await fetchCargasSociales()
+        setCargasSociales(data)
+        setNewCargaSocial({ sueldo_id: 0, monto: 0, descripcion: '' })
+        setEditingCargaSocial(null)
+        setShowModal(false)
       }
-      const data = await fetchExpensas()
-      setExpensas(data)
-      setNewExpensa({ fecha_vencimiento: '', total: 0, saldo_anterior: 0, monto_pagado: 0 })
-      setEditingExpensa(null)
-      setShowModal(false)
     } catch (error) {
-      console.error('Error saving expensa:', error)
+      console.error('Error saving carga social:', error)
     }
   }
 
-  const handleEdit = (expensa: Expensa) => {
-    setEditingExpensa(expensa)
-    setNewExpensa(expensa)
+  const handleEdit = (cargaSocial: CargaSocial) => {
+    setEditingCargaSocial(cargaSocial)
+    setNewCargaSocial(cargaSocial)
     setShowModal(true)
   }
 
   const handleAdd = () => {
-    setEditingExpensa(null)
-    setNewExpensa({ fecha_vencimiento: '', total: 0, saldo_anterior: 0, monto_pagado: 0 })
+    setEditingCargaSocial(null)
+    setNewCargaSocial({ sueldo_id: 0, monto: 0, descripcion: '' })
     setShowModal(true)
   }
 
@@ -80,21 +81,21 @@ const Expensas = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await deleteExpensa(id)
-          const data = await fetchExpensas()
-          setExpensas(data)
-          MySwal.fire('Borrado', 'La expensa ha sido borrada', 'success')
+          await deleteCargaSocial(id)
+          const data = await fetchCargasSociales()
+          setCargasSociales(data)
+          MySwal.fire('Borrado', 'La carga social ha sido borrada', 'success')
         } catch (error) {
-          console.error('Error deleting expensa:', error)
-          MySwal.fire('Error', 'Hubo un error al borrar la expensa', 'error')
+          console.error('Error deleting carga social:', error)
+          MySwal.fire('Error', 'Hubo un error al borrar la carga social', 'error')
         }
       }
     })
   }
-console.log('Expensas', expensas);
+
   return (
     <>
-      <PageTitle breadcrumbs={[]}>Expensas</PageTitle>
+      <PageTitle breadcrumbs={[]}>Cargas Sociales</PageTitle>
       <div className='card'>
         <div className='card-header border-0 pt-6'>
           <div className='card-title'>
@@ -104,13 +105,13 @@ console.log('Expensas', expensas);
                 type='text'
                 data-kt-customer-table-filter='search'
                 className='form-control form-control-solid w-250px ps-14'
-                placeholder='Buscar expensas'
+                placeholder='Buscar cargas sociales'
               />
             </div>
           </div>
           <div className='card-toolbar'>
             <button className='btn btn-primary' onClick={handleAdd}>
-              <i className='bi bi-plus-lg'></i> Agregar Expensa
+              <i className='bi bi-plus-lg'></i> Agregar Carga Social
             </button>
           </div>
         </div>
@@ -119,29 +120,27 @@ console.log('Expensas', expensas);
             <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
               <thead>
                 <tr className='fw-bold text-muted'>
-                  <th className='min-w-150px'>Fecha de Vencimiento</th>
-                  <th className='min-w-140px'>Total</th>
-                  <th className='min-w-120px'>Saldo Anterior</th>
-                  <th className='min-w-120px'>Monto Pagado</th>
+                  <th className='min-w-150px'>Sueldo ID</th>
+                  <th className='min-w-140px'>Monto</th>
+                  <th className='min-w-120px'>Descripción</th>
                   <th className='min-w-100px text-end'>Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                {expensas.map((expensa) => (
-                  <tr key={expensa.id}>
-                    <td>{expensa.fecha_vencimiento}</td>
-                    <td>${Number(expensa.total).toFixed(2)}</td>
-                    <td>${Number(expensa.saldo_anterior).toFixed(2)}</td>
-                    <td>${Number(expensa.monto_pagado).toFixed(2)}</td>
+                {cargasSociales.map((cargaSocial) => (
+                  <tr key={cargaSocial.id}>
+                    <td>{cargaSocial.sueldo_id}</td>
+                    <td>${Number(cargaSocial.monto).toFixed(2)}</td>
+                    <td>{cargaSocial.descripcion}</td>
                     <td className='text-end'>
                       <button
-                        onClick={() => handleEdit(expensa)}
+                        onClick={() => handleEdit(cargaSocial)}
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
                       >
                         <i className='bi bi-pencil-fill text-primary'></i>
                       </button>
                       <button
-                        onClick={() => handleDelete(expensa.id!)}
+                        onClick={() => handleDelete(cargaSocial.id!)}
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                       >
                         <i className='bi bi-trash-fill text-danger'></i>
@@ -157,49 +156,38 @@ console.log('Expensas', expensas);
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>{editingExpensa ? 'Editar Expensa' : 'Agregar Expensa'}</Modal.Title>
+          <Modal.Title>{editingCargaSocial ? 'Editar Carga Social' : 'Agregar Carga Social'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={handleSubmit}>
             <div className='mb-3'>
-              <label className='form-label'>Fecha de Vencimiento</label>
+              <label className='form-label'>Sueldo ID</label>
               <input
-                type='date'
-                name='fecha_vencimiento'
-                value={newExpensa.fecha_vencimiento}
+                type='number'
+                name='sueldo_id'
+                value={newCargaSocial.sueldo_id}
                 onChange={handleInputChange}
                 className='form-control'
                 required
               />
             </div>
             <div className='mb-3'>
-              <label className='form-label'>Total</label>
+              <label className='form-label'>Monto</label>
               <input
                 type='number'
-                name='total'
-                value={newExpensa.total}
+                name='monto'
+                value={newCargaSocial.monto}
                 onChange={handleInputChange}
                 className='form-control'
                 required
               />
             </div>
             <div className='mb-3'>
-              <label className='form-label'>Saldo Anterior</label>
+              <label className='form-label'>Descripción</label>
               <input
-                type='number'
-                name='saldo_anterior'
-                value={newExpensa.saldo_anterior}
-                onChange={handleInputChange}
-                className='form-control'
-                required
-              />
-            </div>
-            <div className='mb-3'>
-              <label className='form-label'>Monto Pagado</label>
-              <input
-                type='number'
-                name='monto_pagado'
-                value={newExpensa.monto_pagado}
+                type='text'
+                name='descripcion'
+                value={newCargaSocial.descripcion}
                 onChange={handleInputChange}
                 className='form-control'
                 required
@@ -210,7 +198,7 @@ console.log('Expensas', expensas);
                 Cancelar
               </button>
               <button type='submit' className='btn btn-primary'>
-                {editingExpensa ? 'Actualizar' : 'Agregar'}
+                {editingCargaSocial ? 'Actualizar' : 'Agregar'}
               </button>
             </div>
           </form>
@@ -220,4 +208,4 @@ console.log('Expensas', expensas);
   )
 }
 
-export default Expensas
+export default CargasSociales

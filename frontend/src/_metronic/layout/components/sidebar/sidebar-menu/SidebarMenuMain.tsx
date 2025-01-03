@@ -22,6 +22,9 @@ const SidebarMenuMain = () => {
       <SidebarMenuItem to='/presupuestos' icon='graph-up' title='Presupuestos' fontIcon='bi-graph-up' />
       <SidebarMenuItem to='/gastos' icon='wallet' title='Gastos' fontIcon='bi-wallet' />
       <SidebarMenuItem to='/cobros' icon='credit-card' title='Cobros' fontIcon='bi-credit-card' />
+      <SidebarMenuItem to='/sueldos' icon='currency-dollar' title='Sueldos' fontIcon='bi-currency-dollar' />
+      <SidebarMenuItem to='/cargas-sociales' icon='people' title='Cargas Sociales' fontIcon='bi-people' />
+      <SidebarMenuItem to='/conceptos' icon='list' title='Conceptos' fontIcon='bi-list' />
 
       <div className='menu-item'>
         <div className='menu-content pt-8 pb-2'>

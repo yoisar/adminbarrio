@@ -10,7 +10,10 @@ use App\Http\Controllers\{
     UserController,
     UserProfileController,
     CategoriaGastoController,
-    AuthController
+    AuthController,
+    SueldoController,
+    CargaSocialController,
+    ConceptoController
 };
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -37,6 +40,9 @@ Route::middleware('api')->group(function () {
     Route::get('/users/role/user', [UserController::class, 'listUsers']); // Endpoint para listar usuarios con rol 'user'
     Route::post('/login', [AuthController::class, 'login']); // Endpoint para login
     Route::post('/verify_token', [AuthController::class, 'verifyToken'])->middleware('auth:sanctum');
+    Route::apiResource('sueldos', SueldoController::class);
+    Route::apiResource('cargas-sociales', CargaSocialController::class);
+    Route::apiResource('conceptos', ConceptoController::class);
 });
 
 // Rutas protegidas por autenticación con Sanctum

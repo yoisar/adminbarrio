@@ -1,6 +1,10 @@
 // import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import { Route, Routes } from 'react-router-dom'
+import CargasSociales from '../modules/adminbarrio/components/cargasSociales/CargasSociales'
+import Cobros from '../modules/adminbarrio/components/cobros/Cobros'
+import Conceptos from '../modules/adminbarrio/components/conceptos/Conceptos'
 import Expensas from '../modules/adminbarrio/components/expensas/Expensas'
+import Sueldos from '../modules/adminbarrio/components/sueldos/Sueldos'
 import { DashboardWrapper } from '../pages/dashboard/DashboardWrapper'
 // import AccesoSeguro from './pages/AccesoSeguro'
 // import AnalisisGastos from './pages/AnalisisGastos'
@@ -39,6 +43,10 @@ const AdminBarrioRoutes = () => {
       {/* <Switch> */}
         <Route path='/dashboard' element={<DashboardWrapper />} />
         <Route path='/expensas' element={<Expensas />} />
+        <Route path='/cargas-sociales' element={<CargasSociales />} />
+        <Route path='/sueldos' element={<Sueldos />} />
+        <Route path='/conceptos' element={<Conceptos />} />
+        <Route path='/cobros' element={<Cobros />} />
         {/* <Route path='/presupuestos' element={<Presupuestos />} />
         <Route path='/gastos' element={<Gastos />} />
         <Route path='/cobros' element={<Cobros />} />

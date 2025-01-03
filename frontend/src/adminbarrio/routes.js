@@ -17,6 +17,7 @@ const AppRoutes = () => {
             <Route path="/expensas-lista" element={<ExpensasList />} />
             <Route path="/expensas-detail/:id" element={<ExpensaDetail />} />
             <Route path="/cobros" element={<Cobros />} />
+            <Route path="/cargas-sociales" element={<CargasSociales />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     );
