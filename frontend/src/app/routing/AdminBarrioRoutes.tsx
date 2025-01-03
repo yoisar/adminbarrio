@@ -4,6 +4,7 @@ import CargasSociales from '../modules/adminbarrio/components/cargasSociales/Car
 import Cobros from '../modules/adminbarrio/components/cobros/Cobros'
 import Conceptos from '../modules/adminbarrio/components/conceptos/Conceptos'
 import Expensas from '../modules/adminbarrio/components/expensas/Expensas'
+import Gastos from '../modules/adminbarrio/components/gastos/Gastos'
 import Sueldos from '../modules/adminbarrio/components/sueldos/Sueldos'
 import { DashboardWrapper } from '../pages/dashboard/DashboardWrapper'
 // import AccesoSeguro from './pages/AccesoSeguro'
@@ -47,6 +48,7 @@ const AdminBarrioRoutes = () => {
         <Route path='/sueldos' element={<Sueldos />} />
         <Route path='/conceptos' element={<Conceptos />} />
         <Route path='/cobros' element={<Cobros />} />
+        <Route path='/gastos' element={<Gastos />} />
         {/* <Route path='/presupuestos' element={<Presupuestos />} />
         <Route path='/gastos' element={<Gastos />} />
         <Route path='/cobros' element={<Cobros />} />

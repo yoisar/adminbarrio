@@ -24,8 +24,19 @@ export const createGasto = async (gasto: Gasto): Promise<Gasto> => {
     return response.data;
 };
 
+// Actualizar un gasto existente
+export const updateGasto = async (id: number, gasto: Gasto): Promise<Gasto> => {
+    const response = await api.put(`/gastos/${id}`, gasto);
+    return response.data;
+};
+
+// Eliminar un gasto
+export const deleteGasto = async (id: number): Promise<void> => {
+    await api.delete(`/gastos/${id}`);
+};
+
 // Obtener todas las categorías de gastos
-export const fetchCategorias = async () => {
+export const fetchCategorias = async (): Promise<any[]> => {
     const response = await api.get('/categorias');
     return response.data;
 };
