@@ -1,0 +1,97 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Chequea el repositorio
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 2. Configura Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      # 3. Cache de dependencias
+      - name: Cache Node modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # 4. Construye el frontend
+      - name: Install dependencies and build
+        run: |
+          cd frontend
+          npm install --legacy-peer-deps
+          npm run build
+
+      # 5. Configura la clave SSH y el host para GitHub
+      - name: Configure SSH Key for GitHub
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p 2223 92.112.178.62 >> ~/.ssh/known_hosts
+
+      # 6. Paso de depuración de conexión SSH
+      - name: Debug SSH Connection
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -p 2223 root@92.112.178.62 exit
+
+      # 7. Actualiza el repositorio en el servidor
+      - name: Git pull on the server
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -p 2223 root@92.112.178.62 "
+          cd /www/wwwroot/www.adminbarrio.com/app &&
+          git pull
+          "
+
+      # 8. Limpia y transfiere el build al servidor
+      - name: Clean and upload build to server
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -p 2223 root@92.112.178.62 "rm -rf /www/wwwroot/www.adminbarrio.com/app/frontend/build/*"
+          rsync -avz -e "ssh -i ~/.ssh/id_ed25519 -p 2223" frontend/build/ root@92.112.178.62:/www/wwwroot/www.adminbarrio.com/app/frontend/build/
+
+      # 9. Transfiere docker-compose.yml y .env.production al servidor
+      - name: Upload docker-compose.yml and .env.production    
+        run: |
+          rsync -avz -e "ssh -i ~/.ssh/id_ed25519 -p 2223" docker-compose.yml root@92.112.178.62:/www/wwwroot/www.adminbarrio.com/app/
+          rsync -avz -e "ssh -i ~/.ssh/id_ed25519 -p 2223" backend/.env.production root@92.112.178.62:/www/wwwroot/www.adminbarrio.com/app/backend/.env.production
+          rsync -avz -e "ssh -i ~/.ssh/id_ed25519 -p 2223" frontend/.env.production root@92.112.178.62:/www/wwwroot/www.adminbarrio.com/app/frontend/.env.production
+
+      # 10. Despliega con Docker dentro de /www/wwwroot/www.adminbarrio.com/app
+      - name: Deploy with Docker
+        uses: appleboy/ssh-action@master
+        with:
+          host: 92.112.178.62
+          username: root
+          port: 2223
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /www/wwwroot/www.adminbarrio.com/app
+            if [ ! -f "docker-compose.yml" ]; then
+              echo "Error: docker-compose.yml not found"
+              exit 1
+            fi
+            if [ ! -f "backend/.env.production" ]; then
+              echo "Error: backend/.env.production not found"
+              exit 1
+            fi
+            if [ ! -f "frontend/.env.production" ]; then
+              echo "Error: frontend/.env.production not found"
+              exit 1
+            fi
+            docker-compose down --remove-orphans -v
+            docker-compose up -d --build backend frontend
+            docker-compose exec backend php artisan migrate --force
