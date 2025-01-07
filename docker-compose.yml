@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  backend:
+  adminbarrio-backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -17,9 +17,9 @@ services:
     ports:
       - "8010:8000"
     depends_on:
-      - db
+      - adminbarrio-db
 
-  frontend:
+  adminbarrio-frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -30,7 +30,7 @@ services:
     ports:
       - "3011:80"
 
-  db:
+  adminbarrio-db:
     image: mysql:8
     environment:
       MYSQL_ROOT_PASSWORD: secret
@@ -42,7 +42,7 @@ services:
     ports:
       - "3311:3306"
 
-  mailhog:
+  adminbarrio-mailhog:
     image: mailhog/mailhog
     ports:
       - "8026:8025"
