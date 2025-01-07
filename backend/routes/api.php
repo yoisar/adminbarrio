@@ -13,7 +13,8 @@ use App\Http\Controllers\{
     AuthController,
     SueldoController,
     CargaSocialController,
-    ConceptoController
+    ConceptoController,
+    BarrioController // Importar el controlador de Barrios
 };
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -43,6 +44,7 @@ Route::middleware('api')->group(function () {
     Route::apiResource('sueldos', SueldoController::class);
     Route::apiResource('cargas-sociales', CargaSocialController::class);
     Route::apiResource('conceptos', ConceptoController::class);
+    Route::apiResource('barrios', BarrioController::class); // Endpoint resource para Barrios
 });
 
 // Rutas protegidas por autenticación con Sanctum

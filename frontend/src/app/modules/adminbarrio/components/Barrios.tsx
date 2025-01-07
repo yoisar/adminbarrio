@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { KTSVG } from '../../../../../_metronic/helpers'
-import { PageTitle } from '../../../../../_metronic/layout/core'
-import { Barrio, createBarrio, deleteBarrio, fetchBarrios, updateBarrio } from '../../services/barrioService'
+import { KTSVG } from '../../../../_metronic/helpers'
+import { PageTitle } from '../../../../_metronic/layout/core'
+import { Barrio, createBarrio, deleteBarrio, fetchBarrios, updateBarrio } from '../services/barrioService'
 
 const MySwal = withReactContent(Swal)
 
@@ -43,7 +43,9 @@ const Barrios = () => {
     e.preventDefault()
     try {
       if (editingBarrio) {
-        await updateBarrio(editingBarrio.id, newBarrio)
+        if (editingBarrio && editingBarrio.id !== undefined) {
+          await updateBarrio(editingBarrio.id, newBarrio)
+        }
       } else {
         await createBarrio(newBarrio)
       }
@@ -141,7 +143,7 @@ const Barrios = () => {
                         <i className='bi bi-pencil-fill text-primary'></i>
                       </button>
                       <button
-                        onClick={() => handleDelete(barrio.id)}
+                        onClick={() => barrio.id !== undefined && handleDelete(barrio.id)}
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                       >
                         <i className='bi bi-trash-fill text-danger'></i>
