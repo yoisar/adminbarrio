@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { getUsers, updateUser } from '../../apps/user-management/users-list/core/_requests'
-import { createUser, User } from '../services/userService'
+import { PageTitle } from '../../../../_metronic/layout/core'
+import { createUser, deleteUser, fetchUsuarios, updateUser, User } from '../services/usuariosService'
 
 const MySwal = withReactContent(Swal)
 
@@ -25,7 +25,7 @@ const Usuarios = () => {
   useEffect(() => {
     const getUsuarios = async () => {
       try {
-        const data = await getUsers()
+        const data = await fetchUsuarios()
         setUsuarios(data)
       } catch (error) {
         console.error('Error fetching usuarios:', error)
@@ -44,11 +44,13 @@ const Usuarios = () => {
     e.preventDefault()
     try {
       if (editingUsuario) {
-        await updateUser(editingUsuario.id, newUsuario)
+        if (editingUsuario && editingUsuario.id !== undefined) {
+          await updateUser(editingUsuario.id, newUsuario)
+        }
       } else {
         await createUser(newUsuario)
       }
-      const data = await getUsers()
+      const data = await fetchUsuarios()
       setUsuarios(data)
       setNewUsuario({ id: 0, name: '', email: '', role: '', telefono: '', direccion: '', created_at: '', updated_at: '' })
       setEditingUsuario(null)
@@ -84,7 +86,7 @@ const Usuarios = () => {
       if (result.isConfirmed) {
         try {
           await deleteUser(id)
-          const data = await getUsers()
+          const data = await fetchUsuarios()
           setUsuarios(data)
           MySwal.fire('Borrado', 'El usuario ha sido borrado', 'success')
         } catch (error) {
@@ -102,7 +104,6 @@ const Usuarios = () => {
         <div className='card-header border-0 pt-6'>
           <div className='card-title'>
             <div className='d-flex align-items-center position-relative my-1'>
-              <KTSVG path='/media/icons/duotune/general/gen021.svg' className='svg-icon-1' />
               <input
                 type='text'
                 data-kt-customer-table-filter='search'
@@ -146,7 +147,7 @@ const Usuarios = () => {
                         <i className='bi bi-pencil-fill text-primary'></i>
                       </button>
                       <button
-                        onClick={() => handleDelete(usuario.id)}
+                        onClick={() => usuario.id !== undefined && handleDelete(usuario.id)}
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                       >
                         <i className='bi bi-trash-fill text-danger'></i>
