@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\UnidadFuncionalSeeder as SeedersUnidadFuncionalSeeder;
 use Illuminate\Database\Seeder;
+use UnidadFuncionalSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,7 +13,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UsersTableSeeder::class,
             CategoriaGastoSeeder::class,
-            UsersWithRoleUserSeeder::class, // Registrar el nuevo seeder aquí
+            // UsersWithRoleUserSeeder::class, 
+            BarrioSeeder::class, 
+            SeedersUnidadFuncionalSeeder::class,
+
         ]);
     }
 }

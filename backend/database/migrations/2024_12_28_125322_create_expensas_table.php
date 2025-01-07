@@ -10,10 +10,13 @@ class CreateExpensasTable extends Migration
     {
         Schema::create('expensas', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('barrio_id')->constrained()->onDelete('cascade');
+            $table->foreignId('unidad_funcional_id')->constrained('unidades_funcionales')->onDelete('cascade');
+            $table->string('periodo');
+            $table->decimal('total', 10, 2);
+            $table->decimal('saldo_pendiente', 10, 2);
             $table->date('fecha_vencimiento');
-            $table->decimal('total', 10, 2); // Total de la expensa
-            $table->decimal('saldo_anterior', 10, 2)->default(0);
-            $table->decimal('monto_pagado', 10, 2)->default(0);
+            $table->string('estado');
             $table->timestamps();
         });
     }

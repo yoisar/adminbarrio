@@ -10,9 +10,11 @@ class CreateGastosTable extends Migration
     {
         Schema::create('gastos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('categoria_gasto_id')->constrained()->onDelete('cascade'); // Relación con Categorías
+            $table->foreignId('barrio_id')->constrained()->onDelete('cascade');
+            $table->foreignId('expensa_id')->constrained()->onDelete('cascade');
+            $table->foreignId('categoria_gasto_id')->constrained()->onDelete('cascade');
             $table->string('descripcion');
-            $table->decimal('monto', 10, 2); // Monto del gasto
+            $table->decimal('monto', 10, 2);
             $table->date('fecha');
             $table->timestamps();
         });

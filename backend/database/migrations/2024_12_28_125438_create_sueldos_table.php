@@ -10,9 +10,12 @@ class CreateSueldosTable extends Migration
     {
         Schema::create('sueldos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('empleado_id')->constrained('users')->onDelete('cascade');
+            $table->string('periodo');
             $table->decimal('monto', 10, 2);
             $table->date('fecha_pago');
+            $table->decimal('descuentos', 10, 2)->nullable();
+            $table->decimal('neto', 10, 2);
             $table->timestamps();
         });
     }

@@ -15,8 +15,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'yois',
             'email' => 'sioy23@gmail.com',
             'password' => Hash::make(env('DEFAULT_USER_PASSWORD', 'yoisAdmin123')),
-            // 'password' => Hash::make('yoisAdmin123'),
-            'role' => 'super_admin', // Puedes usar un sistema de roles aquí
+            'role' => 'super_admin',
         ]);
 
         // Crear Admin
@@ -34,5 +33,19 @@ class UsersTableSeeder extends Seeder
             'password' => Hash::make('password123'),
             'role' => 'user',
         ]);
+
+        // Crear usuarios adicionales con roles aleatorios
+        $roles = ['admin', 'propietario', 'inquilino', 'empleado'];
+
+        for ($i = 1; $i <= 50; $i++) {
+            User::create([
+                'name' => "Usuario $i",
+                'email' => "usuario$i@example.com",
+                'password' => Hash::make('password'),
+                'role' => $roles[array_rand($roles)],
+                // 'telefono' => "12345678$i",
+                // 'direccion' => "Dirección Usuario $i",
+            ]);
+        }
     }
 }

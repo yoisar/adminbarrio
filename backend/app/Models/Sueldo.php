@@ -9,20 +9,20 @@ class Sueldo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'monto', 'fecha'];
+    protected $fillable = [
+        'empleado_id',
+        'periodo',
+        'monto',
+        'fecha_pago',
+        'descuentos',
+        'neto',
+    ];
 
-    public function user()
+    /**
+     * Get the empleado that owns the sueldo.
+     */
+    public function empleado()
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function cargasSociales()
-    {
-        return $this->hasMany(CargaSocial::class);
-    }
-
-    public function conceptos()
-    {
-        return $this->hasMany(Concepto::class);
+        return $this->belongsTo(Empleado::class, );
     }
 }

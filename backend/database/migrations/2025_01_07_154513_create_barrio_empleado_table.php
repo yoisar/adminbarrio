@@ -4,23 +4,20 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateServiciosTable extends Migration
+class CreateBarrioEmpleadoTable extends Migration
 {
     public function up()
     {
-        Schema::create('servicios', function (Blueprint $table) {
+        Schema::create('barrio_empleado', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('barrio_id')->constrained()->onDelete('cascade');
-            $table->string('tipo');
-            $table->string('proveedor');
-            $table->string('estado');
-            $table->decimal('monto', 10, 2);
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('servicios');
+        Schema::dropIfExists('barrio_empleado');
     }
 }
