@@ -43,9 +43,7 @@ const Barrios = () => {
     e.preventDefault()
     try {
       if (editingBarrio) {
-        if (editingBarrio && editingBarrio.id !== undefined) {
-          await updateBarrio(editingBarrio.id, newBarrio)
-        }
+        await updateBarrio(editingBarrio.id!, newBarrio)
       } else {
         await createBarrio(newBarrio)
       }
@@ -143,7 +141,7 @@ const Barrios = () => {
                         <i className='bi bi-pencil-fill text-primary'></i>
                       </button>
                       <button
-                        onClick={() => barrio.id !== undefined && handleDelete(barrio.id)}
+                        onClick={() => handleDelete(barrio.id!)}
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                       >
                         <i className='bi bi-trash-fill text-danger'></i>
@@ -201,7 +199,7 @@ const Barrios = () => {
                 Cancelar
               </button>
               <button type='submit' className='btn btn-primary'>
-                Guardar
+                {editingBarrio ? 'Actualizar' : 'Agregar'}
               </button>
             </div>
           </form>

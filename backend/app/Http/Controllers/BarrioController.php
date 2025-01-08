@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBarrioRequest;
 use App\Http\Requests\UpdateBarrioRequest;
 use App\Models\Barrio;
+use Illuminate\Http\Request;
 
 class BarrioController extends Controller
 {
@@ -13,7 +14,8 @@ class BarrioController extends Controller
      */
     public function index()
     {
-        //
+        $barrios = Barrio::all();
+        return response()->json($barrios);
     }
 
     /**
@@ -29,7 +31,8 @@ class BarrioController extends Controller
      */
     public function store(StoreBarrioRequest $request)
     {
-        //
+        $barrio = Barrio::create($request->validated());
+        return response()->json($barrio, 201);
     }
 
     /**
@@ -37,7 +40,7 @@ class BarrioController extends Controller
      */
     public function show(Barrio $barrio)
     {
-        //
+        return response()->json($barrio);
     }
 
     /**
@@ -53,7 +56,8 @@ class BarrioController extends Controller
      */
     public function update(UpdateBarrioRequest $request, Barrio $barrio)
     {
-        //
+        $barrio->update($request->validated());
+        return response()->json($barrio);
     }
 
     /**
@@ -61,6 +65,7 @@ class BarrioController extends Controller
      */
     public function destroy(Barrio $barrio)
     {
-        //
+        $barrio->delete();
+        return response()->json(null, 204);
     }
 }
