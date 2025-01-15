@@ -6,6 +6,7 @@ export interface Gasto {
     categoria_gasto_id: number;
     barrio_id: number;
     descripcion: string;
+    barrio: string;
     monto: string;
     fecha: string;
     created_at?: string;

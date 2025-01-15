@@ -19,6 +19,7 @@ const Gastos = () => {
     categoria_gasto_id: 0,
     barrio_id: 0,
     descripcion: '',
+    barrio: '',
     monto: '',
     fecha: '',
     created_at: '',
@@ -75,7 +76,7 @@ const Gastos = () => {
       }
       const data = await fetchGastos()
       setGastos(data)
-      setNewGasto({ id: 0, categoria_gasto_id: 0, barrio_id: 0, descripcion: '', monto: '', fecha: '', created_at: '', updated_at: '', categoria: null })
+      setNewGasto({ id: 0, categoria_gasto_id: 0, barrio_id: 0, descripcion: '', barrio: '', monto: '', fecha: '', created_at: '', updated_at: '', categoria: null })
       setEditingGasto(null)
       setShowModal(false)
     } catch (error) {
@@ -91,7 +92,7 @@ const Gastos = () => {
 
   const handleAdd = () => {
     setEditingGasto(null)
-    setNewGasto({ id: 0, categoria_gasto_id: 0, barrio_id: 0, descripcion: '', monto: '', fecha: '', created_at: '', updated_at: '', categoria: null })
+    setNewGasto({ id: 0, categoria_gasto_id: 0, barrio_id: 0, descripcion: '', barrio: '', monto: '', fecha: '', created_at: '', updated_at: '', categoria: null })
     setShowModal(true)
   }
 
