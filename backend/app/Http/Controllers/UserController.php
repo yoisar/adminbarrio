@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Persona;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -11,14 +12,14 @@ class UserController extends Controller
     // Listar todos los usuarios
     public function index()
     {
-        $users = User::all();
+        $users = User::with('persona')->get();
         return response()->json($users);
     }
 
     // Mostrar un usuario específico
     public function show($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::with('persona')->findOrFail($id);
         return response()->json($user);
     }
 
@@ -28,8 +29,12 @@ class UserController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-            'role' => 'required|string|in:super_admin,admin,user', // Validar roles permitidos
+            'password' => 'required|string|min:8',
+            'role' => 'required|string|in:' . implode(',', User::ROLES),
+            'telefono' => 'nullable|string|max:255',
+            'direccion' => 'nullable|string|max:255',
+            'nombre' => 'required|string|max:255',
+            'apellido' => 'required|string|max:255',
         ]);
 
         $user = User::create([
@@ -37,9 +42,19 @@ class UserController extends Controller
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
             'role' => $validatedData['role'],
+            'telefono' => $validatedData['telefono'],
+            'direccion' => $validatedData['direccion'],
         ]);
 
-        return response()->json($user, 201);
+        $persona = Persona::create([
+            'nombre' => $validatedData['nombre'],
+            'apellido' => $validatedData['apellido'],
+            'telefono' => $validatedData['telefono'],
+            'direccion' => $validatedData['direccion'],
+            'user_id' => $user->id,
+        ]);
+
+        return response()->json($user->load('persona'), 201);
     }
 
     // Actualizar un usuario existente
@@ -48,19 +63,33 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         $validatedData = $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|string|email|max:255|unique:users,email,' . $user->id,
-            'password' => 'sometimes|string|min:6',
-            'role' => 'sometimes|string|in:super_admin,admin,user',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8',
+            'role' => 'required|string|in:' . implode(',', User::ROLES),
+            'telefono' => 'nullable|string|max:255',
+            'direccion' => 'nullable|string|max:255',
+            'nombre' => 'required|string|max:255',
+            'apellido' => 'required|string|max:255',
         ]);
 
-        if (isset($validatedData['password'])) {
-            $validatedData['password'] = Hash::make($validatedData['password']);
-        }
+        $user->update([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => $validatedData['password'] ? Hash::make($validatedData['password']) : $user->password,
+            'role' => $validatedData['role'],
+            'telefono' => $validatedData['telefono'],
+            'direccion' => $validatedData['direccion'],
+        ]);
 
-        $user->update($validatedData);
+        $user->persona->update([
+            'nombre' => $validatedData['nombre'],
+            'apellido' => $validatedData['apellido'],
+            'telefono' => $validatedData['telefono'],
+            'direccion' => $validatedData['direccion'],
+        ]);
 
-        return response()->json($user);
+        return response()->json($user->load('persona'));
     }
 
     // Eliminar un usuario

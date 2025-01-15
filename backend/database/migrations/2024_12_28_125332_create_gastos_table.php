@@ -10,8 +10,7 @@ class CreateGastosTable extends Migration
     {
         Schema::create('gastos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('barrio_id')->constrained()->onDelete('cascade');
-            $table->foreignId('expensa_id')->constrained()->onDelete('cascade');
+            $table->foreignId('barrio_id')->constrained()->onDelete('cascade');            
             $table->foreignId('categoria_gasto_id')->constrained()->onDelete('cascade');
             $table->string('descripcion');
             $table->decimal('monto', 10, 2);

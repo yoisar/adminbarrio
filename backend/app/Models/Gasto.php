@@ -10,8 +10,7 @@ class Gasto extends Model
     use HasFactory;
 
     protected $fillable = [
-        'barrio_id',
-        'expensa_id',
+        'barrio_id',        
         'categoria_gasto_id',
         'descripcion',
         'monto',
@@ -25,15 +24,6 @@ class Gasto extends Model
     {
         return $this->belongsTo(Barrio::class);
     }
-
-    /**
-     * Get the expensa that owns the gasto.
-     */
-    public function expensa()
-    {
-        return $this->belongsTo(Expensa::class);
-    }
-
     /**
      * Get the categoria that owns the gasto.
      */

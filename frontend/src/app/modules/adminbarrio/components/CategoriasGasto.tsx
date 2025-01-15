@@ -4,20 +4,17 @@ import Pagination from 'react-bootstrap/Pagination'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { PageTitle } from '../../../../_metronic/layout/core'
-import { createUser, deleteUser, fetchUsuarios, updateUser, User } from '../services/usuariosService'
+import { CategoriaGasto, createCategoriaGasto, deleteCategoriaGasto, fetchCategorias, updateCategoriaGasto } from '../services/gastosService'
 
 const MySwal = withReactContent(Swal)
 
-const Usuarios = () => {
-  const [usuarios, setUsuarios] = useState<User[]>([])
-  const [editingUsuario, setEditingUsuario] = useState<User | null>(null)
-  const [newUsuario, setNewUsuario] = useState<User>({
+const CategoriasGasto = () => {
+  const [categorias, setCategorias] = useState<CategoriaGasto[]>([])
+  const [editingCategoria, setEditingCategoria] = useState<CategoriaGasto | null>(null)
+  const [newCategoria, setNewCategoria] = useState<CategoriaGasto>({
     id: 0,
-    name: '',
-    email: '',
-    role: '',
-    telefono: '',
-    direccion: '',
+    nombre: '',
+    descripcion: '',
     created_at: '',
     updated_at: '',
   })
@@ -26,52 +23,52 @@ const Usuarios = () => {
   const [itemsPerPage] = useState(10)
 
   useEffect(() => {
-    const getUsuarios = async () => {
+    const getCategorias = async () => {
       try {
-        const data = await fetchUsuarios()
-        setUsuarios(data)
+        const data = await fetchCategorias()
+        setCategorias(data)
       } catch (error) {
-        console.error('Error fetching usuarios:', error)
+        console.error('Error fetching categorias:', error)
       }
     }
 
-    getUsuarios()
+    getCategorias()
   }, [])
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    setNewUsuario({ ...newUsuario, [name]: value })
+    setNewCategoria({ ...newCategoria, [name]: value })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      if (editingUsuario) {
-        if (editingUsuario && editingUsuario.id !== undefined) {
-          await updateUser(editingUsuario.id, newUsuario)
+      if (editingCategoria) {
+        if (editingCategoria && editingCategoria.id !== undefined) {
+          await updateCategoriaGasto(editingCategoria.id, newCategoria)
         }
       } else {
-        await createUser(newUsuario)
+        await createCategoriaGasto(newCategoria)
       }
-      const data = await fetchUsuarios()
-      setUsuarios(data)
-      setNewUsuario({ id: 0, name: '', email: '', role: '', telefono: '', direccion: '', created_at: '', updated_at: '' })
-      setEditingUsuario(null)
+      const data = await fetchCategorias()
+      setCategorias(data)
+      setNewCategoria({ id: 0, nombre: '', descripcion: '', created_at: '', updated_at: '' })
+      setEditingCategoria(null)
       setShowModal(false)
     } catch (error) {
-      console.error('Error saving usuario:', error)
+      console.error('Error saving categoria:', error)
     }
   }
 
-  const handleEdit = (usuario: User) => {
-    setEditingUsuario(usuario)
-    setNewUsuario(usuario)
+  const handleEdit = (categoria: CategoriaGasto) => {
+    setEditingCategoria(categoria)
+    setNewCategoria(categoria)
     setShowModal(true)
   }
 
   const handleAdd = () => {
-    setEditingUsuario(null)
-    setNewUsuario({ id: 0, name: '', email: '', role: '', telefono: '', direccion: '', created_at: '', updated_at: '' })
+    setEditingCategoria(null)
+    setNewCategoria({ id: 0, nombre: '', descripcion: '', created_at: '', updated_at: '' })
     setShowModal(true)
   }
 
@@ -88,29 +85,29 @@ const Usuarios = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await deleteUser(id)
-          const data = await fetchUsuarios()
-          setUsuarios(data)
-          MySwal.fire('Borrado', 'El usuario ha sido borrado', 'success')
+          await deleteCategoriaGasto(id)
+          const data = await fetchCategorias()
+          setCategorias(data)
+          MySwal.fire('Borrado', 'La categoría ha sido borrada', 'success')
         } catch (error) {
-          console.error('Error deleting usuario:', error)
-          MySwal.fire('Error', 'Hubo un error al borrar el usuario', 'error')
+          console.error('Error deleting categoria:', error)
+          MySwal.fire('Error', 'Hubo un error al borrar la categoría', 'error')
         }
       }
     })
   }
 
-  // Obtener usuarios actuales
+  // Obtener categorías actuales
   const indexOfLastItem = currentPage * itemsPerPage
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
-  const currentUsuarios = usuarios.slice(indexOfFirstItem, indexOfLastItem)
+  const currentCategorias = categorias.slice(indexOfFirstItem, indexOfLastItem)
 
   // Cambiar de página
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
 
   return (
     <>
-      <PageTitle breadcrumbs={[]}>Gestión de Usuarios</PageTitle>
+      <PageTitle breadcrumbs={[]}>Gestión de Categorías de Gastos</PageTitle>
       <div className='card'>
         <div className='card-header border-0 pt-6'>
           <div className='card-title'>
@@ -119,13 +116,13 @@ const Usuarios = () => {
                 type='text'
                 data-kt-customer-table-filter='search'
                 className='form-control form-control-solid w-250px ps-14'
-                placeholder='Buscar usuarios'
+                placeholder='Buscar categorías'
               />
             </div>
           </div>
           <div className='card-toolbar'>
             <button className='btn btn-primary' onClick={handleAdd}>
-              <i className='bi bi-plus-lg'></i> Agregar Usuario
+              <i className='bi bi-plus-lg'></i> Agregar Categoría
             </button>
           </div>
         </div>
@@ -135,30 +132,24 @@ const Usuarios = () => {
               <thead>
                 <tr className='fw-bold text-muted'>
                   <th className='min-w-150px'>Nombre</th>
-                  <th className='min-w-140px'>Email</th>
-                  <th className='min-w-140px'>Rol</th>
-                  <th className='min-w-120px'>Teléfono</th>
-                  <th className='min-w-120px'>Dirección</th>
+                  <th className='min-w-140px'>Descripción</th>
                   <th className='min-w-100px text-end'>Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                {currentUsuarios.map((usuario) => (
-                  <tr key={usuario.id}>
-                    <td>{usuario.name}</td>
-                    <td>{usuario.email}</td>
-                    <td>{usuario.role}</td>
-                    <td>{usuario.telefono}</td>
-                    <td>{usuario.direccion}</td>
+                {currentCategorias.map((categoria) => (
+                  <tr key={categoria.id}>
+                    <td>{categoria.nombre}</td>
+                    <td>{categoria.descripcion}</td>
                     <td className='text-end'>
                       <button
-                        onClick={() => handleEdit(usuario)}
+                        onClick={() => handleEdit(categoria)}
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
                       >
                         <i className='bi bi-pencil-fill text-primary'></i>
                       </button>
                       <button
-                        onClick={() => usuario.id !== undefined && handleDelete(usuario.id)}
+                        onClick={() => categoria.id !== undefined && handleDelete(categoria.id)}
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                       >
                         <i className='bi bi-trash-fill text-danger'></i>
@@ -170,7 +161,7 @@ const Usuarios = () => {
             </table>
           </div>
           <Pagination>
-            {Array.from({ length: Math.ceil(usuarios.length / itemsPerPage) }, (_, index) => (
+            {Array.from({ length: Math.ceil(categorias.length / itemsPerPage) }, (_, index) => (
               <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => paginate(index + 1)}>
                 {index + 1}
               </Pagination.Item>
@@ -181,7 +172,7 @@ const Usuarios = () => {
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>{editingUsuario ? 'Editar Usuario' : 'Agregar Usuario'}</Modal.Title>
+          <Modal.Title>{editingCategoria ? 'Editar Categoría' : 'Agregar Categoría'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={handleSubmit}>
@@ -189,55 +180,20 @@ const Usuarios = () => {
               <label className='form-label'>Nombre</label>
               <input
                 type='text'
-                name='name'
-                value={newUsuario.name}
+                name='nombre'
+                value={newCategoria.nombre}
                 onChange={handleInputChange}
                 className='form-control'
                 required
               />
             </div>
             <div className='mb-3'>
-              <label className='form-label'>Email</label>
-              <input
-                type='email'
-                name='email'
-                value={newUsuario.email}
+              <label className='form-label'>Descripción</label>
+              <textarea
+                name='descripcion'
+                value={newCategoria.descripcion}
                 onChange={handleInputChange}
                 className='form-control'
-                required
-              />
-            </div>
-            <div className='mb-3'>
-              <label className='form-label'>Rol</label>
-              <input
-                type='text'
-                name='role'
-                value={newUsuario.role}
-                onChange={handleInputChange}
-                className='form-control'
-                required
-              />
-            </div>
-            <div className='mb-3'>
-              <label className='form-label'>Teléfono</label>
-              <input
-                type='text'
-                name='telefono'
-                value={newUsuario.telefono}
-                onChange={handleInputChange}
-                className='form-control'
-                required
-              />
-            </div>
-            <div className='mb-3'>
-              <label className='form-label'>Dirección</label>
-              <input
-                type='text'
-                name='direccion'
-                value={newUsuario.direccion}
-                onChange={handleInputChange}
-                className='form-control'
-                required
               />
             </div>
             <div className='d-flex justify-content-end'>
@@ -245,7 +201,7 @@ const Usuarios = () => {
                 Cancelar
               </button>
               <button type='submit' className='btn btn-primary'>
-                {editingUsuario ? 'Actualizar' : 'Agregar'}
+                {editingCategoria ? 'Actualizar' : 'Agregar'}
               </button>
             </div>
           </form>
@@ -255,4 +211,4 @@ const Usuarios = () => {
   )
 }
 
-export default Usuarios
+export default CategoriasGasto

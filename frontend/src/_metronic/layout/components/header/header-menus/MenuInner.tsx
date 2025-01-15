@@ -19,8 +19,8 @@ export function MenuInner() {
           menuPlacement='right-start'
           menuTrigger='click'
         >
-          <MenuItem title='Registro de Gastos' to='/gastos/registro' />
-          <MenuItem title='Categorización de Gastos' to='/gastos/categorizacion' />
+          <MenuItem title='Gastos' to='/gastos' />
+          <MenuItem title='Categorización de Gastos' to='/categorias-gasto' />
         </MenuInnerWithSub>
         <MenuInnerWithSub
           title='Gestión de Servicios'

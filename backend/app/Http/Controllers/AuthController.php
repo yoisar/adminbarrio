@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Models\Role;
 
 class AuthController extends Controller
 {
@@ -28,10 +30,16 @@ class AuthController extends Controller
             'role' => 'required|string|in:super_admin,admin,user,admin_general'
         ]);
 
-        $user = User::where('email', $credentials['email'])->where('role', $credentials['role'])->first();
-
+        $user = User::where('email', $credentials['email'])->first();
+        Log::info("credentials :".$credentials['password'].' '.$user->password);
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
             return response()->json(['message' => 'Invalid credentials'], 401);
+        }
+
+        // Verificar si el usuario tiene el rol especificado
+        $role = Role::findByName($credentials['role']);
+        if (!$user->hasRole($role)) {
+            return response()->json(['message' => 'Invalid role'], 401);
         }
 
         // Generar un token de acceso

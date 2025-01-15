@@ -14,10 +14,9 @@ use App\Http\Controllers\{
     SueldoController,
     CargaSocialController,
     ConceptoController,
-    BarrioController // Importar el controlador de Barrios
+    BarrioController,
+    UnidadFuncionalController // Importar el controlador de Unidades Funcionales
 };
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,13 +37,13 @@ Route::middleware('api')->group(function () {
     Route::apiResource('cobros', CobrosController::class);
     Route::apiResource('categorias', CategoriaGastoController::class);
     Route::get('/cobros/morosos', [CobrosController::class, 'morosos']);
-    Route::get('/users/role/user', [UserController::class, 'listUsers']); // Endpoint para listar usuarios con rol 'user'
-    Route::post('/login', [AuthController::class, 'login']); // Endpoint para login
+    Route::post('/login', [AuthController::class, 'login']);
     Route::post('/verify_token', [AuthController::class, 'verifyToken'])->middleware('auth:sanctum');
     Route::apiResource('sueldos', SueldoController::class);
     Route::apiResource('cargas-sociales', CargaSocialController::class);
     Route::apiResource('conceptos', ConceptoController::class);
-    Route::apiResource('barrios', BarrioController::class); // Endpoint resource para Barrios
+    Route::apiResource('barrios', BarrioController::class);
+    Route::apiResource('unidades-funcionales', UnidadFuncionalController::class); // Endpoint resource para Unidades Funcionales
 });
 
 // Rutas protegidas por autenticación con Sanctum
@@ -54,8 +53,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // Rutas para el perfil de usuario
-    Route::get('/profile', [UserProfileController::class, 'show']);
     Route::put('/profile', [UserProfileController::class, 'update']);
+    Route::get('/profile', [UserProfileController::class, 'show']);
     Route::put('/profile/change-password', [UserProfileController::class, 'changePassword']);
 });
 
@@ -65,11 +64,7 @@ Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
 });
 
 // Rutas protegidas para administradores
-Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    Route::get('/users', [UserController::class, 'index']);
-    Route::post('/users', [UserController::class, 'store']);
-    Route::get('/users/{id}', [UserController::class, 'show']);
-    Route::put('/users/{id}', [UserController::class, 'update']);
-    Route::delete('/users/{id}', [UserController::class, 'destroy']);
-    Route::get('/users/count', [UserController::class, 'countUsers']); // Nuevo endpoint para contar usuarios
+Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
+    Route::apiResource('users', UserController::class);
+    Route::get('/users/count', [UserController::class, 'countUsers']);
 });
