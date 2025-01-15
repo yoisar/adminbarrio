@@ -22,7 +22,7 @@ class UnidadFuncionalSeeder extends Seeder
         }
 
         // Crear las unidades funcionales restantes en barrios aleatorios
-        for ($i = 31; $i <= 100; $i++) {
+        for ($i = 31; $i <= 30; $i++) {
             UnidadFuncional::create([
                 'numero' => $i,
                 'barrio_id' => rand(2, 10),

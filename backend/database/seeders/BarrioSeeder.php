@@ -16,13 +16,13 @@ class BarrioSeeder extends Seeder
             'descripcion' => 'Barrio privado',
         ]);
 
-        // Crear barrios adicionales en un bucle
-        for ($i = 1; $i <= 10; $i++) {
-            Barrio::create([
-                'nombre' => "Barrio $i",
-                'direccion' => "Dirección Barrio $i",
-                'descripcion' => "Descripción del Barrio $i",
-            ]);
-        }
+        // // Crear barrios adicionales en un bucle
+        // for ($i = 1; $i <= 5; $i++) {
+        //     Barrio::create([
+        //         'nombre' => "Barrio $i",
+        //         'direccion' => "Dirección Barrio $i",
+        //         'descripcion' => "Descripción del Barrio $i",
+        //     ]);
+        // }
     }
 }

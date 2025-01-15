@@ -9,12 +9,16 @@ export const REGISTER_URL = `${API_URL}/register`;
 export const REQUEST_PASSWORD_URL = `${API_URL}/forgot_password`;
 
 // Server should return AuthModel
-export function login(email: string, password: string) {
-    const role='super_admin';
+export function login(email: string, password: string, role: string) {
   return axios.post<AuthModel>(LOGIN_URL, {
     email,
     password,
     role,
+  }).then(response => {
+    const { access_token, token_type } = response.data;
+    localStorage.setItem('auth-token', access_token);
+    localStorage.setItem('user-role', role);
+    return response.data;
   });
 }
 

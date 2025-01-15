@@ -1,71 +1,74 @@
 import React, { useEffect, useState } from 'react'
 import { Modal } from 'react-bootstrap'
+import Pagination from 'react-bootstrap/Pagination'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { KTSVG } from '../../../../_metronic/helpers'
 import { PageTitle } from '../../../../_metronic/layout/core'
-import { Barrio, createBarrio, deleteBarrio, fetchBarrios, updateBarrio } from '../services/barrioService'
+import { CategoriaGasto, createCategoriaGasto, deleteCategoriaGasto, fetchCategorias, updateCategoriaGasto } from '../services/gastosService'
 
 const MySwal = withReactContent(Swal)
 
-const Barrios = () => {
-  const [barrios, setBarrios] = useState<Barrio[]>([])
-  const [editingBarrio, setEditingBarrio] = useState<Barrio | null>(null)
-  const [newBarrio, setNewBarrio] = useState<Barrio>({
+const CategoriasGasto = () => {
+  const [categorias, setCategorias] = useState<CategoriaGasto[]>([])
+  const [editingCategoria, setEditingCategoria] = useState<CategoriaGasto | null>(null)
+  const [newCategoria, setNewCategoria] = useState<CategoriaGasto>({
     id: 0,
     nombre: '',
-    direccion: '',
     descripcion: '',
     created_at: '',
     updated_at: '',
   })
   const [showModal, setShowModal] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage] = useState(10)
 
   useEffect(() => {
-    const getBarrios = async () => {
+    const getCategorias = async () => {
       try {
-        const data = await fetchBarrios()
-        setBarrios(data)
+        const data = await fetchCategorias()
+        setCategorias(data)
       } catch (error) {
-        console.error('Error fetching barrios:', error)
+        console.error('Error fetching categorias:', error)
       }
     }
 
-    getBarrios()
+    getCategorias()
   }, [])
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    setNewBarrio({ ...newBarrio, [name]: value })
+    setNewCategoria({ ...newCategoria, [name]: value })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      if (editingBarrio) {
-        await updateBarrio(editingBarrio.id!, newBarrio)
+      if (editingCategoria) {
+        if (editingCategoria && editingCategoria.id !== undefined) {
+          await updateCategoriaGasto(editingCategoria.id, newCategoria)
+        }
       } else {
-        await createBarrio(newBarrio)
+        await createCategoriaGasto(newCategoria)
       }
-      const data = await fetchBarrios()
-      setBarrios(data)
-      setNewBarrio({ id: 0, nombre: '', direccion: '', descripcion: '', created_at: '', updated_at: '' })
-      setEditingBarrio(null)
+      const data = await fetchCategorias()
+      setCategorias(data)
+      setNewCategoria({ id: 0, nombre: '', descripcion: '', created_at: '', updated_at: '' })
+      setEditingCategoria(null)
       setShowModal(false)
     } catch (error) {
-      console.error('Error saving barrio:', error)
+      console.error('Error saving categoria:', error)
     }
   }
 
-  const handleEdit = (barrio: Barrio) => {
-    setEditingBarrio(barrio)
-    setNewBarrio(barrio)
+  const handleEdit = (categoria: CategoriaGasto) => {
+    setEditingCategoria(categoria)
+    setNewCategoria(categoria)
     setShowModal(true)
   }
 
   const handleAdd = () => {
-    setEditingBarrio(null)
-    setNewBarrio({ id: 0, nombre: '', direccion: '', descripcion: '', created_at: '', updated_at: '' })
+    setEditingCategoria(null)
+    setNewCategoria({ id: 0, nombre: '', descripcion: '', created_at: '', updated_at: '' })
     setShowModal(true)
   }
 
@@ -82,37 +85,44 @@ const Barrios = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await deleteBarrio(id)
-          const data = await fetchBarrios()
-          setBarrios(data)
-          MySwal.fire('Borrado', 'El barrio ha sido borrado', 'success')
+          await deleteCategoriaGasto(id)
+          const data = await fetchCategorias()
+          setCategorias(data)
+          MySwal.fire('Borrado', 'La categoría ha sido borrada', 'success')
         } catch (error) {
-          console.error('Error deleting barrio:', error)
-          MySwal.fire('Error', 'Hubo un error al borrar el barrio', 'error')
+          console.error('Error deleting categoria:', error)
+          MySwal.fire('Error', 'Hubo un error al borrar la categoría', 'error')
         }
       }
     })
   }
 
+  // Obtener categorías actuales
+  const indexOfLastItem = currentPage * itemsPerPage
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage
+  const currentCategorias = categorias.slice(indexOfFirstItem, indexOfLastItem)
+
+  // Cambiar de página
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
+
   return (
     <>
-      <PageTitle breadcrumbs={[]}>Barrios</PageTitle>
+      <PageTitle breadcrumbs={[]}>Gestión de Categorías de Gastos</PageTitle>
       <div className='card'>
         <div className='card-header border-0 pt-6'>
           <div className='card-title'>
             <div className='d-flex align-items-center position-relative my-1'>
-              <KTSVG path='/media/icons/duotune/general/gen021.svg' className='svg-icon-1' />
               <input
                 type='text'
                 data-kt-customer-table-filter='search'
                 className='form-control form-control-solid w-250px ps-14'
-                placeholder='Buscar barrios'
+                placeholder='Buscar categorías'
               />
             </div>
           </div>
           <div className='card-toolbar'>
             <button className='btn btn-primary' onClick={handleAdd}>
-              <i className='bi bi-plus-lg'></i> Agregar Barrio
+              <i className='bi bi-plus-lg'></i> Agregar Categoría
             </button>
           </div>
         </div>
@@ -122,26 +132,24 @@ const Barrios = () => {
               <thead>
                 <tr className='fw-bold text-muted'>
                   <th className='min-w-150px'>Nombre</th>
-                  <th className='min-w-140px'>Dirección</th>
                   <th className='min-w-140px'>Descripción</th>
                   <th className='min-w-100px text-end'>Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                {barrios.map((barrio) => (
-                  <tr key={barrio.id}>
-                    <td>{barrio.nombre}</td>
-                    <td>{barrio.direccion}</td>
-                    <td>{barrio.descripcion}</td>
+                {currentCategorias.map((categoria) => (
+                  <tr key={categoria.id}>
+                    <td>{categoria.nombre}</td>
+                    <td>{categoria.descripcion}</td>
                     <td className='text-end'>
                       <button
-                        onClick={() => handleEdit(barrio)}
+                        onClick={() => handleEdit(categoria)}
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
                       >
                         <i className='bi bi-pencil-fill text-primary'></i>
                       </button>
                       <button
-                        onClick={() => handleDelete(barrio.id!)}
+                        onClick={() => categoria.id !== undefined && handleDelete(categoria.id)}
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                       >
                         <i className='bi bi-trash-fill text-danger'></i>
@@ -152,12 +160,19 @@ const Barrios = () => {
               </tbody>
             </table>
           </div>
+          <Pagination>
+            {Array.from({ length: Math.ceil(categorias.length / itemsPerPage) }, (_, index) => (
+              <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => paginate(index + 1)}>
+                {index + 1}
+              </Pagination.Item>
+            ))}
+          </Pagination>
         </div>
       </div>
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>{editingBarrio ? 'Editar Barrio' : 'Agregar Barrio'}</Modal.Title>
+          <Modal.Title>{editingCategoria ? 'Editar Categoría' : 'Agregar Categoría'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={handleSubmit}>
@@ -166,18 +181,7 @@ const Barrios = () => {
               <input
                 type='text'
                 name='nombre'
-                value={newBarrio.nombre}
-                onChange={handleInputChange}
-                className='form-control'
-                required
-              />
-            </div>
-            <div className='mb-3'>
-              <label className='form-label'>Dirección</label>
-              <input
-                type='text'
-                name='direccion'
-                value={newBarrio.direccion}
+                value={newCategoria.nombre}
                 onChange={handleInputChange}
                 className='form-control'
                 required
@@ -185,13 +189,11 @@ const Barrios = () => {
             </div>
             <div className='mb-3'>
               <label className='form-label'>Descripción</label>
-              <input
-                type='text'
+              <textarea
                 name='descripcion'
-                value={newBarrio.descripcion}
+                value={newCategoria.descripcion}
                 onChange={handleInputChange}
                 className='form-control'
-                required
               />
             </div>
             <div className='d-flex justify-content-end'>
@@ -199,7 +201,7 @@ const Barrios = () => {
                 Cancelar
               </button>
               <button type='submit' className='btn btn-primary'>
-                {editingBarrio ? 'Actualizar' : 'Agregar'}
+                {editingCategoria ? 'Actualizar' : 'Agregar'}
               </button>
             </div>
           </form>
@@ -209,4 +211,4 @@ const Barrios = () => {
   )
 }
 
-export default Barrios
+export default CategoriasGasto

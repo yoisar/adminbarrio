@@ -54,7 +54,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_ed25519 -p 2223 root@92.112.178.62 "
           cd /www/wwwroot/www.adminbarrio.com/app &&
-          git pull
+          GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa' git pull
           "
 
       # 8. Limpia y transfiere el build al servidor
@@ -67,8 +67,8 @@ jobs:
       - name: Upload docker-compose.yml and .env.production    
         run: |
           rsync -avz -e "ssh -i ~/.ssh/id_ed25519 -p 2223" docker-compose.yml root@92.112.178.62:/www/wwwroot/www.adminbarrio.com/app/
-          rsync -avz -e "ssh -i ~/.ssh/id_ed25519 -p 2223" backend/.env.production root@92.112.178.62:/www/wwwroot/www.adminbarrio.com/app/backend/.env.production
-          rsync -avz -e "ssh -i ~/.ssh/id_ed25519 -p 2223" frontend/.env.production root@92.112.178.62:/www/wwwroot/www.adminbarrio.com/app/frontend/.env.production
+          rsync -avz -e "ssh -i ~/.ssh/id_ed25519 -p 2223" backend/.env.production root@92.112.178.62:/www/wwwroot/www.adminbarrio.com/app/backend/.env
+          rsync -avz -e "ssh -i ~/.ssh/id_ed25519 -p 2223" frontend/.env.production root@92.112.178.62:/www/wwwroot/www.adminbarrio.com/app/frontend/.env
 
       # 10. Despliega con Docker dentro de /www/wwwroot/www.adminbarrio.com/app
       - name: Deploy with Docker

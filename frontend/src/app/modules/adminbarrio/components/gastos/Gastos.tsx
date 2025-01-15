@@ -4,17 +4,20 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { KTSVG } from '../../../../../_metronic/helpers'
 import { PageTitle } from '../../../../../_metronic/layout/core'
-import { Gasto, createGasto, deleteGasto, fetchGastos, updateGasto, fetchCategorias } from '../../services/gastosService'
+import { Barrio, fetchBarrios } from '../../services/barrioService'
+import { Gasto, createGasto, deleteGasto, fetchCategorias, fetchGastos, updateGasto } from '../../services/gastosService'
 
 const MySwal = withReactContent(Swal)
 
 const Gastos = () => {
   const [gastos, setGastos] = useState<Gasto[]>([])
   const [categorias, setCategorias] = useState<any[]>([])
+  const [barrios, setBarrios] = useState<Barrio[]>([])
   const [editingGasto, setEditingGasto] = useState<Gasto | null>(null)
   const [newGasto, setNewGasto] = useState<Gasto>({
     id: 0,
     categoria_gasto_id: 0,
+    barrio_id: 0,
     descripcion: '',
     monto: '',
     fecha: '',
@@ -43,8 +46,18 @@ const Gastos = () => {
       }
     }
 
+    const getBarrios = async () => {
+      try {
+        const data = await fetchBarrios()
+        setBarrios(data)
+      } catch (error) {
+        console.error('Error fetching barrios:', error)
+      }
+    }
+
     getGastos()
     getCategorias()
+    getBarrios()
   }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -62,7 +75,7 @@ const Gastos = () => {
       }
       const data = await fetchGastos()
       setGastos(data)
-      setNewGasto({ id: 0, categoria_gasto_id: 0, descripcion: '', monto: '', fecha: '', created_at: '', updated_at: '', categoria: null })
+      setNewGasto({ id: 0, categoria_gasto_id: 0, barrio_id: 0, descripcion: '', monto: '', fecha: '', created_at: '', updated_at: '', categoria: null })
       setEditingGasto(null)
       setShowModal(false)
     } catch (error) {
@@ -78,7 +91,7 @@ const Gastos = () => {
 
   const handleAdd = () => {
     setEditingGasto(null)
-    setNewGasto({ id: 0, categoria_gasto_id: 0, descripcion: '', monto: '', fecha: '', created_at: '', updated_at: '', categoria: null })
+    setNewGasto({ id: 0, categoria_gasto_id: 0, barrio_id: 0, descripcion: '', monto: '', fecha: '', created_at: '', updated_at: '', categoria: null })
     setShowModal(true)
   }
 
@@ -135,6 +148,7 @@ const Gastos = () => {
               <thead>
                 <tr className='fw-bold text-muted'>
                   <th className='min-w-150px'>Categoría</th>
+                  <th className='min-w-140px'>Barrio</th>
                   <th className='min-w-140px'>Descripción</th>
                   <th className='min-w-140px'>Monto</th>
                   <th className='min-w-120px'>Fecha</th>
@@ -144,7 +158,8 @@ const Gastos = () => {
               <tbody>
                 {gastos.map((gasto) => (
                   <tr key={gasto.id}>
-                    <td>{gasto.categoria?.nombre}</td>
+                    <td>{gasto.categoria}</td>
+                    <td>{gasto.barrio}</td>
                     <td>{gasto.descripcion}</td>
                     <td>${Number(gasto.monto).toFixed(2)}</td>
                     <td>{gasto.fecha}</td>
@@ -189,6 +204,23 @@ const Gastos = () => {
                 {categorias.map((categoria) => (
                   <option key={categoria.id} value={categoria.id}>
                     {categoria.nombre}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className='mb-3'>
+              <label className='form-label'>Barrio</label>
+              <select
+                name='barrio_id'
+                value={newGasto.barrio_id}
+                onChange={handleInputChange}
+                className='form-control'
+                required
+              >
+                <option value=''>Seleccione un barrio</option>
+                {barrios.map((barrio) => (
+                  <option key={barrio.id} value={barrio.id}>
+                    {barrio.nombre}
                   </option>
                 ))}
               </select>

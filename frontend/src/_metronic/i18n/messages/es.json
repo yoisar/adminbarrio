@@ -41,6 +41,7 @@
   "AUTH.INPUT.PASSWORD": "Contraseña",
   "AUTH.INPUT.CONFIRM_PASSWORD": "Confirm Password",
   "AUTH.INPUT.USERNAME": "Usuario",
+  "AUTH.INPUT.ROLE": "Rol",
   "AUTH.VALIDATION.INVALID": "{name} is not valid",
   "AUTH.VALIDATION.REQUIRED": "{name} is required",
   "AUTH.VALIDATION.MIN_LENGTH": "{name}} minimum length is {{min}",

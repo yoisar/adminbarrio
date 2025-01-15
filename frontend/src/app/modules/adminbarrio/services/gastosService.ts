@@ -12,6 +12,15 @@ export interface Gasto {
     categoria?: any; // Puedes definir una interfaz para Categoria si es necesario
 }
 
+// Definir la interfaz para CategoriaGasto
+export interface CategoriaGasto {
+    id?: number;
+    nombre: string;
+    descripcion?: string;
+    created_at?: string;
+    updated_at?: string;
+}
+
 // Obtener todos los gastos
 export const fetchGastos = async (): Promise<Gasto[]> => {
     const response = await api.get('/gastos');
@@ -36,9 +45,26 @@ export const deleteGasto = async (id: number): Promise<void> => {
 };
 
 // Obtener todas las categorías de gastos
-export const fetchCategorias = async (): Promise<any[]> => {
+export const fetchCategorias = async (): Promise<CategoriaGasto[]> => {
     const response = await api.get('/categorias');
     return response.data;
+};
+
+// Crear una nueva categoría de gasto
+export const createCategoriaGasto = async (categoria: CategoriaGasto): Promise<CategoriaGasto> => {
+    const response = await api.post('/categorias', categoria);
+    return response.data;
+};
+
+// Actualizar una categoría de gasto existente
+export const updateCategoriaGasto = async (id: number, categoria: CategoriaGasto): Promise<CategoriaGasto> => {
+    const response = await api.put(`/categorias/${id}`, categoria);
+    return response.data;
+};
+
+// Eliminar una categoría de gasto
+export const deleteCategoriaGasto = async (id: number): Promise<void> => {
+    await api.delete(`/categorias/${id}`);
 };
 
 // Obtener todos los gastos de una expensa

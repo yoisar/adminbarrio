@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -10,7 +9,22 @@ class GastosController extends Controller
     // Listar todos los gastos
     public function index()
     {
-        $gastos = Gasto::with('categoria')->get();
+        $gastos = Gasto::with(['barrio', 'categoria'])->get();
+
+        // Modificar la colección para incluir los nombres del barrio y de la categoría de gasto
+        $gastos = $gastos->map(function ($gasto) {
+            return [
+                'id' => $gasto->id,
+                'descripcion' => $gasto->descripcion,
+                'monto' => $gasto->monto,
+                'fecha' => $gasto->fecha,
+                'barrio' => $gasto->barrio ? $gasto->barrio->nombre : null,
+                'categoria' => $gasto->categoria ? $gasto->categoria->nombre : null,
+                'created_at' => $gasto->created_at,
+                'updated_at' => $gasto->updated_at,
+            ];
+        });
+
         return response()->json($gastos);
     }
 
@@ -19,6 +33,7 @@ class GastosController extends Controller
     {
         $validatedData = $request->validate([
             'categoria_gasto_id' => 'required|exists:categoria_gastos,id',
+            'barrio_id' => 'required|exists:barrios,id',
             'descripcion' => 'required|string|max:255',
             'monto' => 'required|numeric',
             'fecha' => 'required|date',
@@ -42,6 +57,7 @@ class GastosController extends Controller
 
         $validatedData = $request->validate([
             'categoria_gasto_id' => 'sometimes|required|exists:categoria_gastos,id',
+            'barrio_id' => 'sometimes|required|exists:barrios,id',
             'descripcion' => 'sometimes|required|string|max:255',
             'monto' => 'sometimes|required|numeric',
             'fecha' => 'sometimes|required|date',

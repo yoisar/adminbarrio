@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Modal } from 'react-bootstrap'
+import Pagination from 'react-bootstrap/Pagination'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { PageTitle } from '../../../../_metronic/layout/core'
@@ -21,6 +22,8 @@ const Usuarios = () => {
     updated_at: '',
   })
   const [showModal, setShowModal] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage] = useState(10)
 
   useEffect(() => {
     const getUsuarios = async () => {
@@ -97,9 +100,17 @@ const Usuarios = () => {
     })
   }
 
+  // Obtener usuarios actuales
+  const indexOfLastItem = currentPage * itemsPerPage
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage
+  const currentUsuarios = usuarios.slice(indexOfFirstItem, indexOfLastItem)
+
+  // Cambiar de página
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
+
   return (
     <>
-      <PageTitle breadcrumbs={[]}>Usuarios</PageTitle>
+      <PageTitle breadcrumbs={[]}>Gestión de Usuarios</PageTitle>
       <div className='card'>
         <div className='card-header border-0 pt-6'>
           <div className='card-title'>
@@ -132,7 +143,7 @@ const Usuarios = () => {
                 </tr>
               </thead>
               <tbody>
-                {usuarios.map((usuario) => (
+                {currentUsuarios.map((usuario) => (
                   <tr key={usuario.id}>
                     <td>{usuario.name}</td>
                     <td>{usuario.email}</td>
@@ -158,6 +169,13 @@ const Usuarios = () => {
               </tbody>
             </table>
           </div>
+          <Pagination>
+            {Array.from({ length: Math.ceil(usuarios.length / itemsPerPage) }, (_, index) => (
+              <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => paginate(index + 1)}>
+                {index + 1}
+              </Pagination.Item>
+            ))}
+          </Pagination>
         </div>
       </div>
 

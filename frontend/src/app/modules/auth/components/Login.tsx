@@ -8,6 +8,15 @@ import { toAbsoluteUrl } from '../../../../_metronic/helpers'
 import { getUserByToken, login } from '../core/_requests'
 import { useAuth } from '../core/Auth'
 
+// Lista de roles permitidos
+const roles = [
+  'super_admin',
+  'admin',
+  'propietario',
+  'inquilino',
+  'empleado',
+]
+
 const loginSchema = Yup.object().shape({
   email: Yup.string()
     .email('Wrong email format')
@@ -18,11 +27,15 @@ const loginSchema = Yup.object().shape({
     .min(3, 'Minimum 3 symbols')
     .max(50, 'Maximum 50 symbols')
     .required('Password is required'),
+  role: Yup.string()
+    .oneOf(roles, 'Invalid role')
+    .required('Role is required'),
 })
 
 const initialValues = {
   email: 'admin@demo.com',
   password: 'demo',
+  role: 'admin',
 }
 
 /*
@@ -42,7 +55,7 @@ export function Login() {
     onSubmit: async (values, { setStatus, setSubmitting }) => {
       setLoading(true)
       try {
-        const { data: auth } = await login(values.email, values.password)
+        const auth = await login(values.email, values.password, values.role)
         saveAuth(auth)
         const { data: user } = await getUserByToken(auth.api_token)
         setCurrentUser(user)
@@ -140,6 +153,39 @@ export function Login() {
           <div className='fv-plugins-message-container'>
             <div className='fv-help-block'>
               <span role='alert'>{formik.errors.password}</span>
+            </div>
+          </div>
+        )}
+      </div>
+      {/* end::Form group */}
+
+      {/* begin::Form group */}
+      <div className='fv-row mb-3'>
+        <label className='form-label fw-bolder text-gray-900 fs-6 mb-0'>
+          {intl.formatMessage({ id: 'AUTH.INPUT.ROLE' })}
+        </label>
+        <select
+          {...formik.getFieldProps('role')}
+          className={clsx(
+            'form-control bg-transparent',
+            {
+              'is-invalid': formik.touched.role && formik.errors.role,
+            },
+            {
+              'is-valid': formik.touched.role && !formik.errors.role,
+            }
+          )}
+        >
+          {roles.map((role) => (
+            <option key={role} value={role}>
+              {role}
+            </option>
+          ))}
+        </select>
+        {formik.touched.role && formik.errors.role && (
+          <div className='fv-plugins-message-container'>
+            <div className='fv-help-block'>
+              <span role='alert'>{formik.errors.role}</span>
             </div>
           </div>
         )}
