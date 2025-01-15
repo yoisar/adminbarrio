@@ -4,6 +4,7 @@ import api from "./api";
 export interface Gasto {
     id?: number;
     categoria_gasto_id: number;
+    barrio_id: number;
     descripcion: string;
     monto: string;
     fecha: string;
