@@ -11,7 +11,6 @@ class Gasto extends Model
 
     protected $fillable = [
         'barrio_id',        
-        'categoria_gasto_id',
         'subcategoria_gasto_id',
         'descripcion',
         'monto',
@@ -24,13 +23,6 @@ class Gasto extends Model
     public function barrio()
     {
         return $this->belongsTo(Barrio::class);
-    }
-    /**
-     * Get the categoria that owns the gasto.
-     */
-    public function categoria()
-    {
-        return $this->belongsTo(CategoriaGasto::class, 'categoria_gasto_id');
     }
 
     /**

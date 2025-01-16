@@ -9,13 +9,12 @@ class GastosController extends Controller
     // Listar todos los gastos
     public function index()
     {
-        $gastos = Gasto::with(['barrio', 'categoria', 'subcategoria'])->get();
+        $gastos = Gasto::with(['barrio', 'subcategoria','subcategoria.categoria'])->get();
 
-        // Modificar la colección para incluir los nombres del barrio, de la categoría y de la subcategoría de gasto
+        // Modificar la colección para incluir los nombres del barrio y de la subcategoría de gasto
         $gastos = $gastos->map(function ($gasto) {
             return [
                 'id' => $gasto->id,
-                'categoria_gasto_id' => $gasto->categoria_gasto_id,
                 'subcategoria_gasto_id' => $gasto->subcategoria_gasto_id,
                 'barrio_id' => $gasto->barrio_id,
                 'descripcion' => $gasto->descripcion,
@@ -24,8 +23,9 @@ class GastosController extends Controller
                 'fecha' => $gasto->fecha,
                 'created_at' => $gasto->created_at,
                 'updated_at' => $gasto->updated_at,
-                'categoria' => $gasto->categoria ? $gasto->categoria->nombre : null,
                 'subcategoria' => $gasto->subcategoria ? $gasto->subcategoria->nombre : null,
+                'categoria'=> $gasto->subcategoria ? $gasto->subcategoria->categoria->nombre : null,
+                'categoriaYSubcateogria'=> $gasto->subcategoria ? $gasto->subcategoria->categoria->nombre . ' - ' . $gasto->subcategoria->nombre : null,
             ];
         });
 
@@ -36,7 +36,7 @@ class GastosController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'categoria_gasto_id' => 'required|exists:categoria_gastos,id',
+            'subcategoria_gasto_id' => 'required|exists:subcategoria_gastos,id',
             'barrio_id' => 'required|exists:barrios,id',
             'descripcion' => 'required|string|max:255',
             'monto' => 'required|numeric',
@@ -50,7 +50,7 @@ class GastosController extends Controller
     // Mostrar un gasto específico
     public function show($id)
     {
-        $gasto = Gasto::with('categoria')->findOrFail($id);
+        $gasto = Gasto::with('subcategoria')->findOrFail($id);
         return response()->json($gasto);
     }
 
@@ -60,7 +60,7 @@ class GastosController extends Controller
         $gasto = Gasto::findOrFail($id);
 
         $validatedData = $request->validate([
-            'categoria_gasto_id' => 'sometimes|required|exists:categoria_gastos,id',
+            'subcategoria_gasto_id' => 'sometimes|required|exists:subcategoria_gastos,id',
             'barrio_id' => 'sometimes|required|exists:barrios,id',
             'descripcion' => 'sometimes|required|string|max:255',
             'monto' => 'sometimes|required|numeric',

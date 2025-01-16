@@ -3,17 +3,17 @@ import api from "./api";
 // Definir la interfaz para Gasto
 export interface Gasto {
     id?: number;
-    categoria_gasto_id: number;
     subcategoria_gasto_id?: number;
     barrio_id: number;
     descripcion: string;
-    barrio: string;
+    barrio: string | null;
     monto: number;
     fecha: string;
     created_at?: string;
     updated_at?: string;
-    categoria?: CategoriaGasto; // Actualizar el tipo de categoria
-    subcategoria?: SubcategoriaGasto;
+    subcategoria?: SubcategoriaGasto | null;
+    categoria?: string | null; 
+    categoriaYSubcategoria: string | null;
 }
 
 // Definir la interfaz para CategoriaGasto
