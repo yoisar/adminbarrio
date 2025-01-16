@@ -1,19 +1,23 @@
 import api from "./api";
+import { Proveedor } from "./proveedorService";
 
 // Definir la interfaz para Gasto
 export interface Gasto {
-    id?: number;
-    subcategoria_gasto_id?: number;
+    id: number;
+    subcategoria_gasto_id: number;
     barrio_id: number;
+    proveedor_id: number;
     descripcion: string;
     barrio: string | null;
     monto: number;
     fecha: string;
+    nro_factura?: string;
     created_at?: string;
     updated_at?: string;
-    subcategoria?: SubcategoriaGasto | null;
-    categoria?: string | null; 
+    subcategoria: SubcategoriaGasto | null;
+    categoria: string | null;
     categoriaYSubcategoria: string | null;
+    proveedor: Proveedor | null;
 }
 
 // Definir la interfaz para CategoriaGasto
@@ -40,6 +44,12 @@ export interface SubcategoriaGasto {
 // Obtener todos los gastos
 export const fetchGastos = async (): Promise<Gasto[]> => {
     const response = await api.get('/gastos');
+    return response.data;
+};
+
+// Obtener los gastos por barrio
+export const fetchGastosByBarrio = async (barrioId: number): Promise<Gasto[]> => {
+    const response = await api.get(`/gastos/barrio/${barrioId}`);
     return response.data;
 };
 

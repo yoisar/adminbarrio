@@ -12,9 +12,11 @@ class Gasto extends Model
     protected $fillable = [
         'barrio_id',        
         'subcategoria_gasto_id',
+        'proveedor_id',
         'descripcion',
         'monto',
         'fecha',
+        'nro_factura',
     ];
 
     /**
@@ -31,5 +33,13 @@ class Gasto extends Model
     public function subcategoria()
     {
         return $this->belongsTo(SubcategoriaGasto::class, 'subcategoria_gasto_id');
+    }
+
+    /**
+     * Get the proveedor that owns the gasto.
+     */
+    public function proveedor()
+    {
+        return $this->belongsTo(Proveedor::class);
     }
 }

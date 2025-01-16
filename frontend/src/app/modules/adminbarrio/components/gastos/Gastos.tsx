@@ -4,63 +4,55 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { KTSVG } from '../../../../../_metronic/helpers'
 import { PageTitle } from '../../../../../_metronic/layout/core'
-import { Barrio, fetchBarrios } from '../../services/barrioService'
-import { createGasto, deleteGasto, fetchGastos, fetchSubcategorias, Gasto, updateGasto } from '../../services/gastosService'
+import { getBarrioFromLocalStorage } from '../../services/authServices'
+import { createGasto, deleteGasto, fetchGastosByBarrio, fetchSubcategorias, Gasto, updateGasto } from '../../services/gastosService'
+import { fetchProveedores, Proveedor } from '../../services/proveedorService'
+// import { fetchProveedores, Proveedor } from '../../services/proveedorService'
 
 const MySwal = withReactContent(Swal)
+
+const initialGastoState: Gasto = {
+  id: 0,
+  subcategoria_gasto_id: 0,
+  barrio_id: 0,
+  proveedor_id: 0,
+  descripcion: '',
+  monto: 0,
+  fecha: '',
+  nro_factura: '',
+  created_at: '',
+  updated_at: '',
+  subcategoria: null,
+  categoria: null,
+  categoriaYSubcategoria: null,
+  barrio: null,
+  proveedor: null
+}
 
 const Gastos = () => {
   const [gastos, setGastos] = useState<Gasto[]>([])
   const [subcategorias, setSubcategorias] = useState<any[]>([])
-  const [barrios, setBarrios] = useState<Barrio[]>([])
+  const [proveedores, setProveedores] = useState<Proveedor[]>([])
   const [editingGasto, setEditingGasto] = useState<Gasto | null>(null)
-  const [newGasto, setNewGasto] = useState<Gasto>({
-    id: 0,
-    subcategoria_gasto_id: 0,
-    barrio_id: 0,
-    descripcion: '',
-    barrio: null,
-    monto: 0,
-    fecha: '',
-    created_at: '',
-    updated_at: '',
-    subcategoria: null,
-    categoria: null,
-    categoriaYSubcategoria: null
-  })
+  const [newGasto, setNewGasto] = useState<Gasto>(initialGastoState)
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
-    const getGastos = async () => {
+    const fetchData = async () => {
       try {
-        const data = await fetchGastos()
-        setGastos(data)
+        const barrio = getBarrioFromLocalStorage().barrio;        
+        if (barrio) {
+          const [gastosData, subcategoriasData, proveedoresData] = await Promise.all([fetchGastosByBarrio(barrio.id), fetchSubcategorias(), fetchProveedores()])
+          setGastos(gastosData)
+          setSubcategorias(subcategoriasData)
+          setProveedores(proveedoresData)
+        }
       } catch (error) {
-        console.error('Error fetching gastos:', error)
+        console.error('Error fetching data:', error)
       }
     }
 
-    const getSubcategorias = async () => {
-      try {
-        const data = await fetchSubcategorias()
-        setSubcategorias(data)
-      } catch (error) {
-        console.error('Error fetching subcategorias:', error)
-      }
-    }
-
-    const getBarrios = async () => {
-      try {
-        const data = await fetchBarrios()
-        setBarrios(data)
-      } catch (error) {
-        console.error('Error fetching barrios:', error)
-      }
-    }
-
-    getGastos()
-    getSubcategorias()
-    getBarrios()
+    fetchData()
   }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -71,20 +63,19 @@ const Gastos = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
+      const barrio = getBarrioFromLocalStorage().barrio;
+
+      if (barrio) {
+        newGasto.barrio_id = barrio.id
+      }
       if (editingGasto) {
         await updateGasto(editingGasto.id!, newGasto)
       } else {
         await createGasto(newGasto)
       }
-      const data = await fetchGastos()
+      const data = await fetchGastosByBarrio(barrio.id)
       setGastos(data)
-      setNewGasto({
-        id: 0, subcategoria_gasto_id: 0,
-        barrio_id: 0, descripcion: '', barrio: '',
-        monto: 0, fecha: '', created_at: '',
-        updated_at: '', subcategoria: null, categoria: null,
-        categoriaYSubcategoria: null
-      })
+      setNewGasto(initialGastoState)
       setEditingGasto(null)
       setShowModal(false)
     } catch (error) {
@@ -100,15 +91,7 @@ const Gastos = () => {
 
   const handleAdd = () => {
     setEditingGasto(null)
-    setNewGasto({
-      id: 0, subcategoria_gasto_id: 0,
-      barrio_id: 0,
-      descripcion: '',
-      barrio: '', monto: 0,
-      fecha: '', created_at: '',
-      updated_at: '', subcategoria: null,
-      categoria: null, categoriaYSubcategoria: null
-    })
+    setNewGasto(initialGastoState)
     setShowModal(true)
   }
 
@@ -126,8 +109,11 @@ const Gastos = () => {
       if (result.isConfirmed) {
         try {
           await deleteGasto(id)
-          const data = await fetchGastos()
-          setGastos(data)
+          const barrio = getBarrioFromLocalStorage()
+          if (barrio) {
+            const data = await fetchGastosByBarrio(barrio.id)
+            setGastos(data)
+          }
           MySwal.fire('Borrado', 'El gasto ha sido borrado', 'success')
         } catch (error) {
           console.error('Error deleting gasto:', error)
@@ -164,22 +150,24 @@ const Gastos = () => {
             <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
               <thead>
                 <tr className='fw-bold text-muted'>
-                  <th className='min-w-140px'>Barrio</th>
-                  <th className='min-w-150px'>Categoria</th>                  
+                  <th className='min-w-150px'>Subcategoría</th>
                   <th className='min-w-140px'>Descripción</th>
                   <th className='min-w-140px'>Monto</th>
                   <th className='min-w-120px'>Fecha</th>
+                  <th className='min-w-150px'>Proveedor</th>
+                  <th className='min-w-140px'>Nro Factura</th>
                   <th className='min-w-100px text-end'>Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 {gastos.map((gasto) => (
                   <tr key={gasto.id}>
-                    <td>{gasto.barrio}</td>
-                    <td>{gasto.categoriaYSubcategoria}</td>                    
+                    <td>{gasto.categoriaYSubcategoria}</td>
                     <td>{gasto.descripcion}</td>
                     <td>${Number(gasto.monto).toFixed(2)}</td>
                     <td>{gasto.fecha}</td>
+                    <td>{gasto.proveedor.nombre}</td>
+                    <td>{gasto.nro_factura}</td>
                     <td className='text-end'>
                       <button
                         onClick={() => handleEdit(gasto)}
@@ -226,23 +214,6 @@ const Gastos = () => {
               </select>
             </div>
             <div className='mb-3'>
-              <label className='form-label'>Barrio</label>
-              <select
-                name='barrio_id'
-                value={newGasto.barrio_id}
-                onChange={handleInputChange}
-                className='form-control'
-                required
-              >
-                <option value=''>Seleccione un barrio</option>
-                {barrios.map((barrio) => (
-                  <option key={barrio.id} value={barrio.id}>
-                    {barrio.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className='mb-3'>
               <label className='form-label'>Descripción</label>
               <input
                 type='text'
@@ -273,6 +244,32 @@ const Gastos = () => {
                 onChange={handleInputChange}
                 className='form-control'
                 required
+              />
+            </div>
+            <div className='mb-3'>
+              <label className='form-label'>Proveedor</label>
+              <select
+                name='proveedor_id'
+                value={newGasto.proveedor_id}
+                onChange={handleInputChange}
+                className='form-control'
+              >
+                <option value=''>Seleccione un proveedor</option>
+                {proveedores.map((proveedor) => (
+                  <option key={proveedor.id} value={proveedor.id}>
+                    {proveedor.nombre}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className='mb-3'>
+              <label className='form-label'>Nro Factura</label>
+              <input
+                type='text'
+                name='nro_factura'
+                value={newGasto.nro_factura}
+                onChange={handleInputChange}
+                className='form-control'
               />
             </div>
             <div className='d-flex justify-content-end'>
