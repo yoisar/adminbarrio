@@ -52,6 +52,7 @@ class Barrio extends Model
      */
     public function administradores()
     {
-        return $this->belongsToMany(User::class, 'barrio_admin', 'barrio_id', 'user_id');
+        return $this->belongsToMany(User::class, 'barrio_admin', 'barrio_id', 'user_id')
+                    ->withPivot('default'); // Incluir el campo 'default' en la relación pivot
     }
 }

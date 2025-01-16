@@ -12,6 +12,7 @@ class CreateBarrioAdminTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('barrio_id')->constrained()->onDelete('cascade');
+            $table->boolean('default')->default(false); 
             $table->timestamps();
         });
     }

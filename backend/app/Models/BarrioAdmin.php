@@ -14,6 +14,7 @@ class BarrioAdmin extends Model
     protected $fillable = [
         'user_id',
         'barrio_id',
+        'default', // Asegurarse de incluir el campo 'default'
     ];
 
     /**

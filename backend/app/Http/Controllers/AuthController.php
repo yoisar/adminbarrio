@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Barrio;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -42,13 +43,18 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid role'], 401);
         }
 
+        // Obtener el barrio administrado por defecto
+        $barrioAdmin = $user->barriosAdministrados()->where('default', true)->first();
+        $barrio = $barrioAdmin ? Barrio::find($barrioAdmin->pivot->barrio_id) : null;
+
         // Generar un token de acceso
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'access_token' => $token,
             'api_token' => $token,
-            'token_type' => 'Bearer'
+            'token_type' => 'Bearer',
+            'barrio' => $barrio
         ]);
     }
 }

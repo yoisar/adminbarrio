@@ -21,16 +21,16 @@ class UnidadFuncionalSeeder extends Seeder
             ]);
         }
 
-        // Crear las unidades funcionales restantes en barrios aleatorios
-        for ($i = 31; $i <= 30; $i++) {
-            UnidadFuncional::create([
-                'numero' => $i,
-                'barrio_id' => rand(2, 10),
-                'propietario_id' => rand(1, 50),
-                'inquilino_id' => rand(1, 50),
-                'saldo_actual' => rand(-10000, 50000),
-                'estado' => 'activo',
-            ]);
-        }
+        // // Crear las unidades funcionales restantes en barrios aleatorios
+        // for ($i = 31; $i <= 30; $i++) {
+        //     UnidadFuncional::create([
+        //         'numero' => $i,
+        //         'barrio_id' => rand(2, 10),
+        //         'propietario_id' => rand(1, 50),
+        //         'inquilino_id' => rand(1, 50),
+        //         'saldo_actual' => rand(-10000, 50000),
+        //         'estado' => 'activo',
+        //     ]);
+        // }
     }
 }

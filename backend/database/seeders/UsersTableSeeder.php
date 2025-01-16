@@ -3,37 +3,48 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use Spatie\Permission\Models\Role;
 use App\Models\Persona;
+use App\Models\BarrioAdmin;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UsersTableSeeder extends Seeder
 {
     public function run()
     {
-        // Lista de roles permitidos
-        $roles = User::ROLES;
-
-        // Crear roles
-        $rolesBases = ['admin', 'propietario', 'inquilino', 'empleado'];
-        foreach ($roles as $role) {
-            Role::firstOrCreate(['name' => $role]);
+        // Crear roles si no existen
+        $rolesBases = [
+            'super_admin',            
+            'admin',
+            'propietario',
+            'inquilino',
+            'empleado',
+        ];;
+        foreach ($rolesBases as $role) {
+            if (!Role::where('name', $role)->exists()) {
+                Role::create(['name' => $role]);
+            }
         }
 
         // Crear Super Admin
         $superAdmin = User::create([
-            'name' => 'yois',
-            'email' => 'sioy23@gmail.com',
+            'name' => 'Yassel Omar',
+            'email' => 'superadmin@adminbarrio.com',
             'password' => Hash::make(env('DEFAULT_USER_PASSWORD', 'yoisAdmin123')),
         ]);
         $superAdmin->assignRole('super_admin');
         Persona::create([
-            'nombre' => "Yassel Omar ",
+            'nombre' => "Yassel Omar",
             'apellido' => "Izquierdo Souchay",
             'telefono' => "+54-9-3764-624361",
             'direccion' => "Calle 137 a",
             'user_id' => $superAdmin->id,
+        ]);
+        BarrioAdmin::create([
+            'user_id' => $superAdmin->id,
+            'barrio_id' => 1,
+            'default' => true,
         ]);
 
         // Crear Admin
@@ -50,6 +61,11 @@ class UsersTableSeeder extends Seeder
             'direccion' => "xxxxx",
             'user_id' => $admin->id,
         ]);
+        BarrioAdmin::create([
+            'user_id' => $admin->id,
+            'barrio_id' => 1,
+            'default' => true,
+        ]);
 
         // Crear Usuario Vecino/Inquilino
         $user = User::create([
@@ -61,7 +77,7 @@ class UsersTableSeeder extends Seeder
 
         // Crear usuarios adicionales con roles aleatorios
         for ($i = 1; $i <= 50; $i++) {
-            $randomRole = $roles[array_rand($rolesBases)];
+            $randomRole = $rolesBases[array_rand($rolesBases)];
             $newUser = User::create([
                 'name' => "Usuario $i",
                 'email' => "usuario$i@example.com",
