@@ -10,6 +10,7 @@ use App\Http\Controllers\{
     UserController,
     UserProfileController,
     CategoriaGastoController,
+    SubcategoriaGastoController, // Importar el controlador de Subcategorias de Gastos
     AuthController,
     SueldoController,
     CargaSocialController,
@@ -36,6 +37,7 @@ Route::middleware('api')->group(function () {
     Route::apiResource('expensas', ExpensasController::class);
     Route::apiResource('cobros', CobrosController::class);
     Route::apiResource('categorias', CategoriaGastoController::class);
+    Route::apiResource('subcategorias', SubcategoriaGastoController::class); // Endpoint resource para Subcategorias de Gastos
     Route::get('/cobros/morosos', [CobrosController::class, 'morosos']);
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/verify_token', [AuthController::class, 'verifyToken'])->middleware('auth:sanctum');

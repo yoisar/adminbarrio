@@ -5,7 +5,8 @@ import withReactContent from 'sweetalert2-react-content'
 import { KTSVG } from '../../../../../_metronic/helpers'
 import { PageTitle } from '../../../../../_metronic/layout/core'
 import { Barrio, fetchBarrios } from '../../services/barrioService'
-import { Gasto, createGasto, deleteGasto, fetchCategorias, fetchGastos, updateGasto } from '../../services/gastosService'
+import { createGasto, deleteGasto, fetchCategorias, fetchGastos, Gasto, updateGasto } from '../../services/gastosService'
+// import { Gasto, createGasto, deleteGasto, fetchCategorias, fetchGastos, updateGasto } from '../../services/gastosService'
 
 const MySwal = withReactContent(Swal)
 
@@ -17,14 +18,16 @@ const Gastos = () => {
   const [newGasto, setNewGasto] = useState<Gasto>({
     id: 0,
     categoria_gasto_id: 0,
+    subcategoria_gasto_id: 0,
     barrio_id: 0,
     descripcion: '',
     barrio: '',
-    monto: '',
+    monto: 0,
     fecha: '',
     created_at: '',
     updated_at: '',
-    categoria: null
+    categoria: null,
+    subcategoria: null
   })
   const [showModal, setShowModal] = useState(false)
 
@@ -76,7 +79,7 @@ const Gastos = () => {
       }
       const data = await fetchGastos()
       setGastos(data)
-      setNewGasto({ id: 0, categoria_gasto_id: 0, barrio_id: 0, descripcion: '', barrio: '', monto: '', fecha: '', created_at: '', updated_at: '', categoria: null })
+      setNewGasto({ id: 0, categoria_gasto_id: 0, subcategoria_gasto_id: 0, barrio_id: 0, descripcion: '', barrio: '', monto: 0, fecha: '', created_at: '', updated_at: '', categoria: null, subcategoria: null })
       setEditingGasto(null)
       setShowModal(false)
     } catch (error) {
@@ -92,7 +95,7 @@ const Gastos = () => {
 
   const handleAdd = () => {
     setEditingGasto(null)
-    setNewGasto({ id: 0, categoria_gasto_id: 0, barrio_id: 0, descripcion: '', barrio: '', monto: '', fecha: '', created_at: '', updated_at: '', categoria: null })
+    setNewGasto({ id: 0, categoria_gasto_id: 0, subcategoria_gasto_id: 0, barrio_id: 0, descripcion: '', barrio: '', monto: 0, fecha: '', created_at: '', updated_at: '', categoria: null, subcategoria: null })
     setShowModal(true)
   }
 
@@ -149,6 +152,7 @@ const Gastos = () => {
               <thead>
                 <tr className='fw-bold text-muted'>
                   <th className='min-w-150px'>Categoría</th>
+                  <th className='min-w-150px'>Subcategoría</th>
                   <th className='min-w-140px'>Barrio</th>
                   <th className='min-w-140px'>Descripción</th>
                   <th className='min-w-140px'>Monto</th>
@@ -159,7 +163,8 @@ const Gastos = () => {
               <tbody>
                 {gastos.map((gasto) => (
                   <tr key={gasto.id}>
-                    <td>{gasto.categoria}</td>
+                    <td>{gasto.categoria?.nombre}</td>
+                    <td>{gasto.subcategoria?.nombre}</td>
                     <td>{gasto.barrio}</td>
                     <td>{gasto.descripcion}</td>
                     <td>${Number(gasto.monto).toFixed(2)}</td>
@@ -207,6 +212,24 @@ const Gastos = () => {
                     {categoria.nombre}
                   </option>
                 ))}
+              </select>
+            </div>
+            <div className='mb-3'>
+              <label className='form-label'>Subcategoría</label>
+              <select
+                name='subcategoria_gasto_id'
+                value={newGasto.subcategoria_gasto_id}
+                onChange={handleInputChange}
+                className='form-control'
+              >
+                <option value=''>Seleccione una subcategoría</option>
+                {categorias.map((categoria) =>
+                  categoria.subcategorias.map((subcategoria: any) => (
+                    <option key={subcategoria.id} value={subcategoria.id}>
+                      {categoria.nombre} - {subcategoria.nombre}
+                    </option>
+                  ))
+                )}
               </select>
             </div>
             <div className='mb-3'>

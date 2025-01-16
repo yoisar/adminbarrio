@@ -12,6 +12,7 @@ class CreateGastosTable extends Migration
             $table->id();
             $table->foreignId('barrio_id')->constrained()->onDelete('cascade');            
             $table->foreignId('categoria_gasto_id')->constrained()->onDelete('cascade');
+            $table->foreignId('subcategoria_gasto_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('descripcion');
             $table->decimal('monto', 10, 2);
             $table->date('fecha');

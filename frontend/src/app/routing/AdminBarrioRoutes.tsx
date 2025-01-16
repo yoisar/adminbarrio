@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 import Barrios from '../modules/adminbarrio/components/Barrios'
 import CategoriasGasto from '../modules/adminbarrio/components/CategoriasGasto'
 import Gastos from '../modules/adminbarrio/components/gastos/Gastos'
+import SubcategoriasGasto from '../modules/adminbarrio/components/gastos/SubcategoriasGasto'
 import UnidadesFuncionales from '../modules/adminbarrio/components/UnidadesFuncionales'
 import Usuarios from '../modules/adminbarrio/components/Usuarios'
 import { DashboardWrapper } from '../pages/dashboard/DashboardWrapper'
@@ -35,7 +36,8 @@ const AdminBarrioRoutes = () => {
       <Route path="/usuarios" element={<Usuarios />} />
       <Route path="/unidades-funcionales" element={<UnidadesFuncionales />} />
       <Route path="/categorias-gasto" element={<CategoriasGasto />} />
-       <Route path="/gastos" element={<Gastos />} />
+      <Route path="/subcategorias-gastos" element={<SubcategoriasGasto />} />
+      <Route path="/gastos" element={<Gastos />} />       
       {/* <Route path="/expensas" element={<Expensas />} /> 
       <Route path="/expensas-lista" element={<ExpensasList />} />
       <Route path="/expensas-detail/:id" element={<ExpensaDetail />} />

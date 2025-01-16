@@ -26,8 +26,9 @@ const SidebarMenuMain = () => {
                 title='Gastos'
                 fontIcon='bi-wallet'
             >
-                <SidebarMenuItem to='gastos' title='Registro de Gastos' />
+                <SidebarMenuItem to='/gastos' title='Registro de Gastos' />
                 <SidebarMenuItem to='/categorias-gasto' title='Categorización de Gastos' />
+                <SidebarMenuItem to='/subcategorias-gastos' title='Subcategorías de Gastos' />
             </SidebarMenuItemWithSub>
 
             <SidebarMenuItemWithSub

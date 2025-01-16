@@ -4,14 +4,16 @@ import api from "./api";
 export interface Gasto {
     id?: number;
     categoria_gasto_id: number;
+    subcategoria_gasto_id?: number;
     barrio_id: number;
     descripcion: string;
     barrio: string;
-    monto: string;
+    monto: number;
     fecha: string;
     created_at?: string;
     updated_at?: string;
-    categoria?: any; // Puedes definir una interfaz para Categoria si es necesario
+    categoria?: CategoriaGasto; // Actualizar el tipo de categoria
+    subcategoria?: SubcategoriaGasto;
 }
 
 // Definir la interfaz para CategoriaGasto
@@ -19,6 +21,18 @@ export interface CategoriaGasto {
     id?: number;
     nombre: string;
     descripcion?: string;
+    created_at?: string;
+    updated_at?: string;
+    subcategorias?: SubcategoriaGasto[];
+}
+
+// Definir la interfaz para SubcategoriaGasto
+export interface SubcategoriaGasto {
+    id?: number;
+    categoria_gasto_id: number;
+    nombre: string;
+    descripcion?: string;
+    categoria?: CategoriaGasto; // Actualizar el tipo de categoria
     created_at?: string;
     updated_at?: string;
 }
@@ -69,13 +83,25 @@ export const deleteCategoriaGasto = async (id: number): Promise<void> => {
     await api.delete(`/categorias/${id}`);
 };
 
-// Obtener todos los gastos de una expensa
-export const fetchGastosByExpensaId = async (expensaId: number): Promise<Gasto[]> => {
-    try {
-        const response = await api.get(`/expensas/${expensaId}/gastos`);
-        return response.data;
-    } catch (error) {
-        console.error("Error fetching gastos:", error);
-        throw error;
-    }
+// Crear una nueva subcategoría de gasto
+export const createSubcategoriaGasto = async (subcategoria: SubcategoriaGasto): Promise<SubcategoriaGasto> => {
+    const response = await api.post('/subcategorias', subcategoria);
+    return response.data;
+};
+
+// Actualizar una subcategoría de gasto existente
+export const updateSubcategoriaGasto = async (id: number, subcategoria: SubcategoriaGasto): Promise<SubcategoriaGasto> => {
+    const response = await api.put(`/subcategorias/${id}`, subcategoria);
+    return response.data;
+};
+
+// Eliminar una subcategoría de gasto
+export const deleteSubcategoriaGasto = async (id: number): Promise<void> => {
+    await api.delete(`/subcategorias/${id}`);
+};
+
+// Obtener todas las subcategorías de gastos
+export const fetchSubcategorias = async (): Promise<SubcategoriaGasto[]> => {
+    const response = await api.get('/subcategorias');
+    return response.data;
 };

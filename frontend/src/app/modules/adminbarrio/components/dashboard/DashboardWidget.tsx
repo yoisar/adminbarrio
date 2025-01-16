@@ -4,7 +4,7 @@ import { KTIcon } from '../../../../../_metronic/helpers'
 import { useThemeMode } from '../../../../../_metronic/partials'
 import { Cobro, fetchCobros } from '../../services/cobrosService'
 import { Expensa, fetchExpensas } from '../../services/expensasService'
-import { Gasto, fetchGastos } from '../../services/gastosService'
+import { fetchGastos, Gasto } from '../../services/gastosService'
 import { fetchMorosos } from '../../services/morososService'
 
 type Props = {

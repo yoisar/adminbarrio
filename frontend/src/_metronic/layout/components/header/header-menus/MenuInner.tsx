@@ -23,6 +23,16 @@ export function MenuInner() {
           <MenuItem title='Categorización de Gastos' to='/categorias-gasto' />
         </MenuInnerWithSub>
         <MenuInnerWithSub
+          title='Gestión de Gastos'
+          to='/gastos'
+          menuPlacement='right-start'
+          menuTrigger='click'
+        >
+          <MenuItem title='Gastos' to='/gastos' />
+          <MenuItem title='Categorización de Gastos' to='/categorias-gasto' />
+          <MenuItem title='Subcategorías de Gastos' to='/subcategorias-gastos' />
+        </MenuInnerWithSub>
+        <MenuInnerWithSub
           title='Gestión de Servicios'
           to='/servicios'
           menuPlacement='right-start'

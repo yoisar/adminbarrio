@@ -9,19 +9,23 @@ class GastosController extends Controller
     // Listar todos los gastos
     public function index()
     {
-        $gastos = Gasto::with(['barrio', 'categoria'])->get();
+        $gastos = Gasto::with(['barrio', 'categoria', 'subcategoria'])->get();
 
-        // Modificar la colección para incluir los nombres del barrio y de la categoría de gasto
+        // Modificar la colección para incluir los nombres del barrio, de la categoría y de la subcategoría de gasto
         $gastos = $gastos->map(function ($gasto) {
             return [
                 'id' => $gasto->id,
+                'categoria_gasto_id' => $gasto->categoria_gasto_id,
+                'subcategoria_gasto_id' => $gasto->subcategoria_gasto_id,
+                'barrio_id' => $gasto->barrio_id,
                 'descripcion' => $gasto->descripcion,
+                'barrio' => $gasto->barrio ? $gasto->barrio->nombre : null,
                 'monto' => $gasto->monto,
                 'fecha' => $gasto->fecha,
-                'barrio' => $gasto->barrio ? $gasto->barrio->nombre : null,
-                'categoria' => $gasto->categoria ? $gasto->categoria->nombre : null,
                 'created_at' => $gasto->created_at,
                 'updated_at' => $gasto->updated_at,
+                'categoria' => $gasto->categoria ? $gasto->categoria->nombre : null,
+                'subcategoria' => $gasto->subcategoria ? $gasto->subcategoria->nombre : null,
             ];
         });
 

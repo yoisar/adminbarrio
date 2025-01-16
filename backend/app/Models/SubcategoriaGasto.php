@@ -5,22 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CategoriaGasto extends Model
+class SubcategoriaGasto extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'categoria_gasto_id',
         'nombre',
         'descripcion',
     ];
 
-    public function gastos()
+    public function categoria()
     {
-        return $this->hasMany(Gasto::class);
-    }
-
-    public function subcategorias()
-    {
-        return $this->hasMany(SubcategoriaGasto::class);
+        return $this->belongsTo(CategoriaGasto::class, 'categoria_gasto_id');
     }
 }
