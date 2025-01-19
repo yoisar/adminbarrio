@@ -1,5 +1,5 @@
+import { saveAs } from 'file-saver';
 import api from "./api";
-import { Proveedor } from "./proveedorService";
 
 // Definir la interfaz para Gasto
 export interface Gasto {
@@ -17,7 +17,7 @@ export interface Gasto {
     subcategoria: SubcategoriaGasto | null;
     categoria: string | null;
     categoriaYSubcategoria: string | null;
-    proveedor: Proveedor | null;
+    proveedor: string ;
 }
 
 // Definir la interfaz para CategoriaGasto
@@ -114,4 +114,22 @@ export const deleteSubcategoriaGasto = async (id: number): Promise<void> => {
 export const fetchSubcategorias = async (): Promise<SubcategoriaGasto[]> => {
     const response = await api.get('/subcategorias');
     return response.data;
+};
+
+// Exportar gastos a Excel
+export const exportGastos = async (): Promise<void> => {
+    const response = await api.get('/gastos/export', { responseType: 'blob' });
+    const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    saveAs(blob, 'gastos.xlsx');
+};
+
+// Importar gastos desde Excel
+export const importGastos = async (file: File): Promise<void> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    await api.post('/gastos/import', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
 };

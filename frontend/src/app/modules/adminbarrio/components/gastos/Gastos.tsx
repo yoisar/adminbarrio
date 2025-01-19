@@ -5,9 +5,8 @@ import withReactContent from 'sweetalert2-react-content'
 import { KTSVG } from '../../../../../_metronic/helpers'
 import { PageTitle } from '../../../../../_metronic/layout/core'
 import { getBarrioFromLocalStorage } from '../../services/authServices'
-import { createGasto, deleteGasto, fetchGastosByBarrio, fetchSubcategorias, Gasto, updateGasto } from '../../services/gastosService'
+import { createGasto, deleteGasto, exportGastos, fetchGastosByBarrio, fetchSubcategorias, Gasto, importGastos, updateGasto } from '../../services/gastosService'
 import { fetchProveedores, Proveedor } from '../../services/proveedorService'
-// import { fetchProveedores, Proveedor } from '../../services/proveedorService'
 
 const MySwal = withReactContent(Swal)
 
@@ -26,7 +25,7 @@ const initialGastoState: Gasto = {
   categoria: null,
   categoriaYSubcategoria: null,
   barrio: null,
-  proveedor: null
+  proveedor: ''
 }
 
 const Gastos = () => {
@@ -123,6 +122,34 @@ const Gastos = () => {
     })
   }
 
+  const handleExport = async () => {
+    try {
+      await exportGastos()
+      MySwal.fire('Exportado', 'Los gastos han sido exportados correctamente', 'success')
+    } catch (error) {
+      console.error('Error exporting gastos:', error)
+      MySwal.fire('Error', 'Hubo un error al exportar los gastos', 'error')
+    }
+  }
+
+  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      try {
+        await importGastos(file)
+        const barrio = getBarrioFromLocalStorage().barrio
+        if (barrio) {
+          const data = await fetchGastosByBarrio(barrio.id)
+          setGastos(data)
+        }
+        MySwal.fire('Importado', 'Los gastos han sido importados correctamente', 'success')
+      } catch (error) {
+        console.error('Error importing gastos:', error)
+        MySwal.fire('Error', 'Hubo un error al importar los gastos', 'error')
+      }
+    }
+  }
+
   return (
     <>
       <PageTitle breadcrumbs={[]}>Gastos</PageTitle>
@@ -143,6 +170,13 @@ const Gastos = () => {
             <button className='btn btn-primary' onClick={handleAdd}>
               <i className='bi bi-plus-lg'></i> Agregar Gasto
             </button>
+            <button className='btn btn-secondary ms-2' onClick={handleExport}>
+              <i className='bi bi-file-earmark-excel'></i> Exportar
+            </button>
+            <label className='btn btn-secondary ms-2'>
+              <i className='bi bi-file-earmark-excel'></i> Importar
+              <input type='file' accept='.xlsx' onChange={handleImport} hidden />
+            </label>
           </div>
         </div>
         <div className='card-body py-4'>
@@ -166,7 +200,7 @@ const Gastos = () => {
                     <td>{gasto.descripcion}</td>
                     <td>${Number(gasto.monto).toFixed(2)}</td>
                     <td>{gasto.fecha}</td>
-                    <td>{gasto.proveedor.nombre}</td>
+                    <td>{gasto.proveedor}</td>
                     <td>{gasto.nro_factura}</td>
                     <td className='text-end'>
                       <button

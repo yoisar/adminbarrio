@@ -17,7 +17,8 @@ use App\Http\Controllers\{
     ConceptoController,
     BarrioController,
     UnidadFuncionalController, // Importar el controlador de Unidades Funcionales
-    ProveedorController // Importar el controlador de Proveedores
+    ProveedorController, // Importar el controlador de Proveedores
+    GastoImportExportController // Importar el controlador de importación/exportación de gastos
 };
 
 /*
@@ -41,13 +42,15 @@ Route::middleware('api')->group(function () {
     Route::apiResource('categorias', CategoriaGastoController::class);
     Route::apiResource('subcategorias', SubcategoriaGastoController::class); // Endpoint resource para Subcategorias de Gastos
     Route::apiResource('proveedores', ProveedorController::class); // Endpoint resource para Proveedores
+    Route::apiResource('barrios', BarrioController::class); // Endpoint resource para Barrios
+    Route::post('/gastos/import', [GastoImportExportController::class, 'import']); // Endpoint para importar gastos
+    Route::get('/gastos/export', [GastoImportExportController::class, 'export']); // Endpoint para exportar gastos
     Route::get('/cobros/morosos', [CobrosController::class, 'morosos']);
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/verify_token', [AuthController::class, 'verifyToken'])->middleware('auth:sanctum');
     Route::apiResource('sueldos', SueldoController::class);
     Route::apiResource('cargas-sociales', CargaSocialController::class);
     Route::apiResource('conceptos', ConceptoController::class);
-    Route::apiResource('barrios', BarrioController::class);
     Route::apiResource('unidades-funcionales', UnidadFuncionalController::class); // Endpoint resource para Unidades Funcionales
 });
 

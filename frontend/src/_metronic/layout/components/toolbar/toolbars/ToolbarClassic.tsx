@@ -1,9 +1,10 @@
 
 import clsx from 'clsx'
-import {useState} from 'react'
-import {KTIcon} from '../../../../helpers'
-import {CreateAppModal, Dropdown1} from '../../../../partials'
-import {useLayout} from '../../../core'
+import { useState } from 'react'
+import { KTIcon } from '../../../../helpers'
+import { CreateAppModal } from '../../../../partials'
+import { DropdownBarrios1 } from '../../../../partials/content/dropdown/DropdownBarrios1'
+import { useLayout } from '../../../core'
 
 const ToolbarClassic = () => {
   const {config} = useLayout()
@@ -23,9 +24,10 @@ const ToolbarClassic = () => {
             data-kt-menu-placement='bottom-end'
           >
             <KTIcon iconName='filter' className='fs-6 text-muted me-1' />
-            Filter
+            Filtrar
           </a>
-          <Dropdown1 />
+          {/* <Dropdown1 /> */}
+          <DropdownBarrios1 />
         </div>
       )}
 
@@ -63,4 +65,5 @@ const ToolbarClassic = () => {
   )
 }
 
-export {ToolbarClassic}
+export { ToolbarClassic }
+
