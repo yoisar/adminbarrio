@@ -65,7 +65,7 @@ const DashboardWidget: FC<Props> = ({
   }
 
   const totalExpensas = expensas.reduce((acc, expensa) => acc + expensa.total, 0)
-  const totalGastos = gastos.reduce((acc, gasto) => acc + parseFloat(gasto.monto), 0)
+  const totalGastos = gastos.reduce((acc, gasto) => acc + parseFloat(gasto.monto.toString()), 0)
   const totalCobros = cobros.reduce((acc, cobro) => acc + parseFloat(cobro.monto_pagado), 0)
 
   return (
