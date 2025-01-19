@@ -41,7 +41,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519        
+          chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           ssh-keyscan -p 2223 92.112.178.62 >> ~/.ssh/known_hosts
 
@@ -61,8 +61,8 @@ jobs:
       # 8. Limpia y transfiere el build al servidor
       - name: Clean and upload build to server
         run: |
-          ssh -i ~/.ssh/id_ed25519 -p 2223 root@92.112.178.62 "rm -rf /www/wwwroot/www.adminbarrio.com/app/frontend/build/*"
-          rsync -avz -e "ssh -i ~/.ssh/id_ed25519 -p 2223" frontend/build/ root@92.112.178.62:/www/wwwroot/www.adminbarrio.com/app/frontend/build/
+          ssh -i ~/.ssh/id_ed25519 -p 2223 root@92.112.178.62 "rm -rf /www/wwwroot/www.adminbarrio.com/app/frontend/dist/*"
+          rsync -avz -e "ssh -i ~/.ssh/id_ed25519 -p 2223" frontend/dist/ root@92.112.178.62:/www/wwwroot/www.adminbarrio.com/app/frontend/dist/
 
       # 9. Transfiere docker-compose.yml y .env.production al servidor
       - name: Upload docker-compose.yml and .env.production    
