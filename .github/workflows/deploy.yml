@@ -40,8 +40,9 @@ jobs:
       - name: Configure SSH Key for GitHub
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519        
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
           ssh-keyscan -p 2223 92.112.178.62 >> ~/.ssh/known_hosts
 
       # 6. Paso de depuración de conexión SSH
