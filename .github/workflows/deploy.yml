@@ -85,14 +85,14 @@ jobs:
               echo "Error: docker-compose.yml not found"
               exit 1
             fi
-            if [ ! -f "backend/.env.production" ]; then
-              echo "Error: backend/.env.production not found"
+            if [ ! -f "backend/.env" ]; then
+              echo "Error: backend/.env not found"
               exit 1
             fi
-            if [ ! -f "frontend/.env.production" ]; then
-              echo "Error: frontend/.env.production not found"
+            if [ ! -f "frontend/.env" ]; then
+              echo "Error: frontend/.env not found"
               exit 1
             fi
-            docker-compose down --remove-orphans -v
+      # docker-compose down --remove-orphans -v
             docker-compose up -d --build adminbarrio-backend adminbarrio-frontend
             docker-compose exec adminbarrio-backend php artisan migrate --force
