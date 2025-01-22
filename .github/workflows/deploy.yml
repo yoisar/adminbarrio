@@ -95,4 +95,4 @@ jobs:
             fi
             docker-compose down --remove-orphans -v
             docker-compose up -d --build adminbarrio-backend adminbarrio-frontend
-            docker-compose exec -T adminbarrio-backend php artisan migrate --force
+            docker-compose exec -T adminbarrio-backend php artisan migrate
