@@ -33,7 +33,7 @@ services:
       - "3011:80"
 
   adminbarrio-db:
-    conteinter_name: adminbarrio-db
+    container_name: adminbarrio-db
     image: mysql:8
     environment:
       MYSQL_ROOT_PASSWORD: secret
@@ -46,7 +46,7 @@ services:
       - "3311:3306"
 
   adminbarrio-mailhog:
-    contaier_name: adminbarrio-mailhog
+    container_name: adminbarrio-mailhog
     image: mailhog/mailhog
     ports:
       - "8026:8025"
