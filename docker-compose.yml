@@ -7,7 +7,7 @@ services:
     volumes:
       - ./backend:/var/www/html
     environment:
-      - DB_HOST=db
+      - DB_HOST=app-adminbarrio-db-1
       - DB_PORT=3306
       - DB_DATABASE=adminbarrio
       - DB_USERNAME=root
