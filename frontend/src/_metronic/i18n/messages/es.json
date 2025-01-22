@@ -22,7 +22,6 @@
   "AUTH.LOGIN.APPLE": "Iniciar sesión con Apple",
   "AUTH.LOGIN.OR_WITH_EMAIL": "O con correo electrónico",
   "AUTH.LOGIN.USE_ACCOUNT": "Usa la cuenta",
-  "AUTH.LOGIN.AND_PASSWORD": "y la contraseña",
   "AUTH.LOGIN.TO_CONTINUE": "para continuar.",
   "AUTH.LOGIN.FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
   "AUTH.LOGIN.CONTINUE": "Continuar",
@@ -85,5 +84,7 @@
   "ECOMMERCE.CUSTOMERS.EDIT.UPDATE_MESSAGE": "Customer has been updated",
   "ECOMMERCE.CUSTOMERS.EDIT.ADD_MESSAGE": "Customer has been created",
   "ACTIVITY.LOGS.TITLE": "Registros de Actividad",
-  "ACTIVITY.LOGS.VIEW_ALL": "Ver Todas las Actividades"
+  "ACTIVITY.LOGS.VIEW_ALL": "Ver Todas las Actividades",
+  "AUTH.LOGIN.USE_YOUR_EMAIL": "Usa tu correo electrónico",
+  "AUTH.LOGIN.AND_PASSWORD": "y tu contraseña"
 }

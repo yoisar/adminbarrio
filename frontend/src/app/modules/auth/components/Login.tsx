@@ -94,13 +94,13 @@ export function Login() {
           <div className='alert-text font-weight-bold'>{formik.status}</div>
         </div>
       ) : (
-        <div className='mb-10 bg-light-info p-8 rounded'>
-          <div className='text-info'>
-            {intl.formatMessage({ id: 'AUTH.LOGIN.USE_ACCOUNT' })}{' '}
-            <strong>admin@demo.com</strong> {intl.formatMessage({ id: 'AUTH.LOGIN.AND_PASSWORD' })}{' '}
-            <strong>demo</strong> {intl.formatMessage({ id: 'AUTH.LOGIN.TO_CONTINUE' })}
+          <div className='mb-10 bg-light-info p-8 rounded'>
+            <div className='text-info'>
+              {intl.formatMessage({ id: 'AUTH.LOGIN.USE_YOUR_EMAIL' })}{' '}
+              <strong>{intl.formatMessage({ id: 'AUTH.LOGIN.AND_PASSWORD' })}</strong>{' '}
+              {intl.formatMessage({ id: 'AUTH.LOGIN.TO_CONTINUE' })}
+            </div>
           </div>
-        </div>
       )}
 
       {/* begin::Form group */}
