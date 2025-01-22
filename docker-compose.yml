@@ -1,13 +1,14 @@
 version: "3.9"
 services:
   adminbarrio-backend:
+    container_name: adminbarrio-backend
     build:
       context: ./backend
       dockerfile: Dockerfile
     volumes:
       - ./backend:/var/www/html
     environment:
-      - DB_HOST=app-adminbarrio-db-1
+      - DB_HOST=adminbarrio-db
       - DB_PORT=3306
       - DB_DATABASE=adminbarrio
       - DB_USERNAME=root
@@ -20,6 +21,7 @@ services:
       - adminbarrio-db
 
   adminbarrio-frontend:
+    container_name: adminbarrio-frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -31,6 +33,7 @@ services:
       - "3011:80"
 
   adminbarrio-db:
+    conteinter_name: adminbarrio-db
     image: mysql:8
     environment:
       MYSQL_ROOT_PASSWORD: secret
@@ -43,6 +46,7 @@ services:
       - "3311:3306"
 
   adminbarrio-mailhog:
+    contaier_name: adminbarrio-mailhog
     image: mailhog/mailhog
     ports:
       - "8026:8025"
