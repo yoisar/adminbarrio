@@ -14,7 +14,7 @@ export function DropdownBarrios1() {
       const userId = user ? user.id : null; 
       console.log('userId', user);
       if (userId !== null) {
-        const barriosData = await fetchBarrios(userId)
+        const barriosData = await fetchBarrios()
         setBarrios(barriosData)
       }
     }

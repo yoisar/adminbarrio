@@ -12,14 +12,14 @@ class UserController extends Controller
     // Listar todos los usuarios
     public function index()
     {
-        $users = User::with('persona')->get();
+        $users = User::all();
         return response()->json($users);
     }
 
     // Mostrar un usuario específico
     public function show($id)
     {
-        $user = User::with('persona')->findOrFail($id);
+        $user = User::findOrFail($id);
         return response()->json($user);
     }
 
@@ -30,31 +30,10 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
-            'role' => 'required|string|in:' . implode(',', User::ROLES),
-            'telefono' => 'nullable|string|max:255',
-            'direccion' => 'nullable|string|max:255',
-            'nombre' => 'required|string|max:255',
-            'apellido' => 'required|string|max:255',
         ]);
 
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
-            'role' => $validatedData['role'],
-            'telefono' => $validatedData['telefono'],
-            'direccion' => $validatedData['direccion'],
-        ]);
-
-        $persona = Persona::create([
-            'nombre' => $validatedData['nombre'],
-            'apellido' => $validatedData['apellido'],
-            'telefono' => $validatedData['telefono'],
-            'direccion' => $validatedData['direccion'],
-            'user_id' => $user->id,
-        ]);
-
-        return response()->json($user->load('persona'), 201);
+        $user = User::create($validatedData);
+        return response()->json($user, 201);
     }
 
     // Actualizar un usuario existente
@@ -63,41 +42,19 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:8',
-            'role' => 'required|string|in:' . implode(',', User::ROLES),
-            'telefono' => 'nullable|string|max:255',
-            'direccion' => 'nullable|string|max:255',
-            'nombre' => 'required|string|max:255',
-            'apellido' => 'required|string|max:255',
+            'name' => 'sometimes|required|string|max:255',
+            'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . $id,
+            'password' => 'sometimes|required|string|min:8',
         ]);
 
-        $user->update([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => $validatedData['password'] ? Hash::make($validatedData['password']) : $user->password,
-            'role' => $validatedData['role'],
-            'telefono' => $validatedData['telefono'],
-            'direccion' => $validatedData['direccion'],
-        ]);
-
-        $user->persona->update([
-            'nombre' => $validatedData['nombre'],
-            'apellido' => $validatedData['apellido'],
-            'telefono' => $validatedData['telefono'],
-            'direccion' => $validatedData['direccion'],
-        ]);
-
-        return response()->json($user->load('persona'));
+        $user->update($validatedData);
+        return response()->json($user);
     }
 
     // Eliminar un usuario
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
-
+        User::destroy($id);
         return response()->json(null, 204);
     }
 
@@ -111,7 +68,7 @@ class UserController extends Controller
     // Contar usuarios con rol 'user'
     public function countUsers()
     {
-        $count = User::where('role','=', 'user')->count();
-        return response()->json(['count' => $count]);
+        $userCount = User::count();
+        return response()->json(['count' => $userCount]);
     }
 }

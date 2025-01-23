@@ -39,21 +39,22 @@ Route::middleware('api')->group(function () {
     
     Route::get('/dashboard', [DashboardController::class, 'index']);
     
-    
     Route::get('/gastos/barrio/{barrio_id}', [GastosController::class, 'getGastosByBarrio']); // Endpoint para obtener gastos por barrio
     Route::post('/gastos/import', [GastoImportExportController::class, 'import']); // Endpoint para importar gastos
     Route::get('/gastos/export', [GastoImportExportController::class, 'export']); // Endpoint para exportar gastos
     Route::apiResource('gastos', GastosController::class);
-
+    
+    Route::get('/expensas/total', [ExpensasController::class, 'getTotalExpensas']); // Endpoint para obtener el total de expensas
     Route::apiResource('expensas', ExpensasController::class);
-    Route::apiResource('cobros', CobrosController::class);
+    
+    Route::get('/cobros/total', [CobrosController::class, 'getTotalCobros']); // Endpoint para obtener el total de cobros
     Route::get('/cobros/morosos', [CobrosController::class, 'morosos']);
+    Route::apiResource('cobros', CobrosController::class);
     
     Route::apiResource('categorias', CategoriaGastoController::class);
     Route::apiResource('subcategorias', SubcategoriaGastoController::class); // Endpoint resource para Subcategorias de Gastos
     
     Route::apiResource('proveedores', ProveedorController::class); // Endpoint resource para Proveedores
-    
     
     Route::get('/barrios/admin', [BarrioController::class, 'getBarriosByAdmin']); // Endpoint para obtener barrios administrados por el usuario actual
     Route::apiResource('barrios', BarrioController::class); // Endpoint resource para Barrios
@@ -82,7 +83,8 @@ Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
 });
 
 // Rutas protegidas para administradores
-Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
-    Route::apiResource('users', UserController::class);
+Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {    
     Route::get('/users/count', [UserController::class, 'countUsers']);
+    Route::get('/users/role/user', [UserController::class, 'listUsers']); // Endpoint para listar usuarios con rol 'user'
+    Route::apiResource('users', UserController::class);
 });
