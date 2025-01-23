@@ -79,8 +79,11 @@ const Gastos = () => {
       } else {
         await createGasto(newGasto)
       }
-      const data = await fetchGastosByBarrio(barrio.id)
-      setGastos(data)
+      if (user) {
+        const data = await fetchGastosByBarrio(user.id)
+        setGastos(data)
+      }
+
       setNewGasto(initialGastoState)
       setEditingGasto(null)
       setShowModal(false)

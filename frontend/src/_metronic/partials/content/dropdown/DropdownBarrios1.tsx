@@ -13,8 +13,10 @@ export function DropdownBarrios1() {
       const user = getUserFromLocalStorage();
       const userId = user ? user.id : null; 
       console.log('userId', user);
-      const barriosData = await fetchBarrios(userId)
-      setBarrios(barriosData)
+      if (userId !== null) {
+        const barriosData = await fetchBarrios(userId)
+        setBarrios(barriosData)
+      }
     }
 
     fetchData()
