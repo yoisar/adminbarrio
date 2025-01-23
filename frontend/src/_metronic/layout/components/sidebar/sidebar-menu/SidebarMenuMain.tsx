@@ -26,12 +26,12 @@ const SidebarMenuMain = () => {
                 title='Gastos'
                 fontIcon='bi-wallet'
             >
-                <SidebarMenuItem to='/gastos' title='Registro de Gastos' />
+                <SidebarMenuItem to='/gastos' title='Gastos' />
                 <SidebarMenuItem to='/categorias-gasto' title='Categorización de Gastos' />
                 <SidebarMenuItem to='/subcategorias-gastos' title='Subcategorías de Gastos' />
             </SidebarMenuItemWithSub>
 
-            <SidebarMenuItemWithSub
+            {/* <SidebarMenuItemWithSub
                 to='/servicios'
                 icon='tools'
                 title='Servicios'
@@ -39,9 +39,9 @@ const SidebarMenuMain = () => {
             >
                 <SidebarMenuItem to='/servicios/registro' title='Registro de Servicios' />
                 <SidebarMenuItem to='/servicios/configuracion' title='Configuración de Servicios' />
-            </SidebarMenuItemWithSub>
+            </SidebarMenuItemWithSub> */}
 
-            <SidebarMenuItemWithSub
+            {/* <SidebarMenuItemWithSub
                 to='/sueldos'
                 icon='currency-dollar'
                 title='Sueldos'
@@ -49,7 +49,7 @@ const SidebarMenuMain = () => {
             >
                 <SidebarMenuItem to='/sueldos/calculo' title='Cálculo de Sueldos' />
                 <SidebarMenuItem to='/sueldos/recibos' title='Generación de Recibos' />
-            </SidebarMenuItemWithSub>
+            </SidebarMenuItemWithSub> */}
 
             <SidebarMenuItemWithSub
                 to='/expensas'
@@ -57,8 +57,8 @@ const SidebarMenuMain = () => {
                 title='Expensas'
                 fontIcon='bi-cash'
             >
-                <SidebarMenuItem to='/expensas/generacion' title='Generación de Expensas' />
-                <SidebarMenuItem to='/expensas/desglose' title='Desglose de Gastos' />
+                <SidebarMenuItem to='/expensas' title='Expensas' />
+                {/* <SidebarMenuItem to='/expensas/desglose' title='Desglose de Gastos' /> */}
             </SidebarMenuItemWithSub>
 
             <SidebarMenuItemWithSub
@@ -67,8 +67,8 @@ const SidebarMenuMain = () => {
                 title='Cobros'
                 fontIcon='bi-credit-card'
             >
-                <SidebarMenuItem to='/cobros/registro' title='Registro de Pagos' />
-                <SidebarMenuItem to='/cobros/seguimiento' title='Seguimiento de Pagos' />
+                <SidebarMenuItem to='/cobros' title='Pagos' />
+                {/* <SidebarMenuItem to='/cobros/seguimiento' title='Seguimiento de Pagos' /> */}
             </SidebarMenuItemWithSub>
 
             <SidebarMenuItem to='/usuarios' icon='person' title='Usuarios' fontIcon='bi-person' />
