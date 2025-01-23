@@ -31,7 +31,7 @@ class UsersTableSeeder extends Seeder
         $superAdmin = User::create([
             'name' => 'Yassel Omar',
             'email' => 'superadmin@adminbarrio.com',
-            'password' => Hash::make(env('DEFAULT_USER_PASSWORD', 'yoisAdmin123')),
+            'password' => Hash::make(env('DEFAULT_USER_PASSWORD', 'Adm1nB@rr1o2025...')),
         ]);
         $superAdmin->assignRole('super_admin');
         Persona::create([
