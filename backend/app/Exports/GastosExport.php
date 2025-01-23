@@ -10,8 +10,7 @@ class GastosExport implements FromCollection, WithHeadings
 {
     public function collection()
     {
-        $gastos = Gasto::with(['barrio', 'subcategoria.categoria', 'proveedor'])->get();
-
+        $gastos = Gasto::with(['barrio', 'subcategoria.categoria', 'proveedor'])->get();        
         if ($gastos->isEmpty()) {
             throw new \Exception('No hay datos para exportar');
         }

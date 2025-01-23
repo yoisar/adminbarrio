@@ -33,31 +33,39 @@ use App\Http\Controllers\{
 */
 
 // Rutas públicas de la API
-// Route::middleware('api')->group(function () {
-// Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-    Route::apiResource('gastos', GastosController::class);
-    Route::get('/gastos/barrio/{barrio_id}', [GastosController::class, 'getGastosByBarrio']); // Endpoint para obtener gastos por barrio
-    Route::apiResource('expensas', ExpensasController::class);
-    Route::apiResource('cobros', CobrosController::class);
-    Route::apiResource('categorias', CategoriaGastoController::class);
-    Route::apiResource('subcategorias', SubcategoriaGastoController::class); // Endpoint resource para Subcategorias de Gastos
-    Route::apiResource('proveedores', ProveedorController::class); // Endpoint resource para Proveedores
-    Route::get('/barrios/admin', [BarrioController::class, 'getBarriosByAdmin']); // Endpoint para obtener barrios administrados por el usuario actual
-    Route::apiResource('barrios', BarrioController::class); // Endpoint resource para Barrios    
-    Route::post('/gastos/import', [GastoImportExportController::class, 'import']); // Endpoint para importar gastos
-    Route::get('/gastos/export', [GastoImportExportController::class, 'export']); // Endpoint para exportar gastos
-    Route::get('/cobros/morosos', [CobrosController::class, 'morosos']);
+Route::middleware('api')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/verify_token', [AuthController::class, 'verifyToken'])->middleware('auth:sanctum');
+    
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+    
+    
+    Route::get('/gastos/barrio/{barrio_id}', [GastosController::class, 'getGastosByBarrio']); // Endpoint para obtener gastos por barrio
+    Route::post('/gastos/import', [GastoImportExportController::class, 'import']); // Endpoint para importar gastos
+    Route::get('/gastos/export', [GastoImportExportController::class, 'export']); // Endpoint para exportar gastos
+    Route::apiResource('gastos', GastosController::class);
+
+    Route::apiResource('expensas', ExpensasController::class);
+    Route::apiResource('cobros', CobrosController::class);
+    Route::get('/cobros/morosos', [CobrosController::class, 'morosos']);
+    
+    Route::apiResource('categorias', CategoriaGastoController::class);
+    Route::apiResource('subcategorias', SubcategoriaGastoController::class); // Endpoint resource para Subcategorias de Gastos
+    
+    Route::apiResource('proveedores', ProveedorController::class); // Endpoint resource para Proveedores
+    
+    
+    Route::get('/barrios/admin', [BarrioController::class, 'getBarriosByAdmin']); // Endpoint para obtener barrios administrados por el usuario actual
+    Route::apiResource('barrios', BarrioController::class); // Endpoint resource para Barrios
+    
     Route::apiResource('sueldos', SueldoController::class);
     Route::apiResource('cargas-sociales', CargaSocialController::class);
     Route::apiResource('conceptos', ConceptoController::class);
     Route::apiResource('unidades-funcionales', UnidadFuncionalController::class); // Endpoint resource para Unidades Funcionales
-    // });
+});
 
-    // Rutas protegidas por autenticación con Sanctum
-
+// Rutas protegidas por autenticación con Sanctum
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
@@ -66,7 +74,7 @@ use App\Http\Controllers\{
     Route::put('/profile', [UserProfileController::class, 'update']);
     Route::get('/profile', [UserProfileController::class, 'show']);
     Route::put('/profile/change-password', [UserProfileController::class, 'changePassword']);
-// });
+});
 
 // Rutas protegidas para super administradores
 Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {

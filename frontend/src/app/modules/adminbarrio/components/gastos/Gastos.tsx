@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import React, { useEffect, useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import Swal from 'sweetalert2'
@@ -209,7 +210,7 @@ const Gastos = () => {
                     <td>{gasto.categoriaYSubcategoria}</td>
                     <td>{gasto.descripcion}</td>
                     <td>${Number(gasto.monto).toFixed(2)}</td>
-                    <td>{gasto.fecha}</td>
+                    <td>{format(new Date(gasto.fecha), 'dd/MM/yyyy')}</td>
                     <td>{gasto.proveedor}</td>
                     <td>{gasto.nro_factura}</td>
                     <td className='text-end'>
