@@ -10,9 +10,9 @@ export interface Barrio {
     updated_at?: string;
 }
 
-// Obtener todos los barrios
-export const fetchBarrios = async (): Promise<Barrio[]> => {
-    const response = await api.get('/barrios');
+// Obtener los barrios administrados por el usuario actual
+export const fetchBarrios = async (userId: number): Promise<Barrio[]> => {
+    const response = await api.get(`/barrios/admin?user_id=${userId}`);
     return response.data;
 };
 

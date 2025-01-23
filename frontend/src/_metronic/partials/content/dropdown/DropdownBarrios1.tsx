@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
+import { getUserFromLocalStorage } from '../../../../app/modules/adminbarrio/services/authServices'
 import { Barrio, fetchBarrios } from '../../../../app/modules/adminbarrio/services/barrioService'
-
 
 export function DropdownBarrios1() {
   const [barrios, setBarrios] = useState<Barrio[]>([])
@@ -10,7 +10,10 @@ export function DropdownBarrios1() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const barriosData = await fetchBarrios()
+      const user = getUserFromLocalStorage();
+      const userId = user ? user.id : null; 
+      console.log('userId', user);
+      const barriosData = await fetchBarrios(userId)
       setBarrios(barriosData)
     }
 

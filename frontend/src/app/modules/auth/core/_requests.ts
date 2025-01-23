@@ -15,9 +15,11 @@ export function login(email: string, password: string, role: string) {
     password,
     role,
   }).then(response => {
-    const { access_token, token_type } = response.data;
+    const { access_token, token_type, barrio,user } = response.data;
     localStorage.setItem('auth-token', access_token);
     localStorage.setItem('user-role', role);
+    localStorage.setItem('barrio', JSON.stringify(barrio));
+    localStorage.setItem('user', JSON.stringify(user));    
     return response.data;
   });
 }

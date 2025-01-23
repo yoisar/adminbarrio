@@ -12,7 +12,12 @@ class BarrioSeeder extends Seeder
         // Crear el primer barrio con los datos especificados
         Barrio::create([
             'nombre' => 'Barrio Panambi Lapachos',
-            'direccion' => 'Calle 137',
+            'direccion' => 'Calle 134 A',
+            'descripcion' => 'Barrio privado',
+        ]);
+        Barrio::create([
+            'nombre' => 'Jardines de Panambi',
+            'direccion' => 'Calle 134 A',
             'descripcion' => 'Barrio privado',
         ]);
 

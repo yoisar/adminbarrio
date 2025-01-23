@@ -46,6 +46,11 @@ class UsersTableSeeder extends Seeder
             'barrio_id' => 1,
             'default' => true,
         ]);
+        BarrioAdmin::create([
+            'user_id' => $superAdmin->id,
+            'barrio_id' => 2,
+            'default' => true,
+        ]);
 
         // Crear Admin
         $admin = User::create([

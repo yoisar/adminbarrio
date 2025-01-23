@@ -4,7 +4,8 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { KTSVG } from '../../../../../_metronic/helpers'
 import { PageTitle } from '../../../../../_metronic/layout/core'
-import { getBarrioFromLocalStorage } from '../../services/authServices'
+import { getUserFromLocalStorage } from '../../services/authServices'
+import { Barrio, fetchBarrios } from '../../services/barrioService'
 import { createGasto, deleteGasto, exportGastos, fetchGastosByBarrio, fetchSubcategorias, Gasto, importGastos, updateGasto } from '../../services/gastosService'
 import { fetchProveedores, Proveedor } from '../../services/proveedorService'
 
@@ -32,6 +33,7 @@ const Gastos = () => {
   const [gastos, setGastos] = useState<Gasto[]>([])
   const [subcategorias, setSubcategorias] = useState<any[]>([])
   const [proveedores, setProveedores] = useState<Proveedor[]>([])
+  const [barrios, setBarrios] = useState<Barrio[]>([])
   const [editingGasto, setEditingGasto] = useState<Gasto | null>(null)
   const [newGasto, setNewGasto] = useState<Gasto>(initialGastoState)
   const [showModal, setShowModal] = useState(false)
@@ -39,12 +41,18 @@ const Gastos = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const barrio = getBarrioFromLocalStorage().barrio;        
-        if (barrio) {
-          const [gastosData, subcategoriasData, proveedoresData] = await Promise.all([fetchGastosByBarrio(barrio.id), fetchSubcategorias(), fetchProveedores()])
+        const user = getUserFromLocalStorage();
+        if (user) {
+          const [gastosData, subcategoriasData, proveedoresData, barriosData] = await Promise.all([
+            fetchGastosByBarrio(user.id),
+            fetchSubcategorias(),
+            fetchProveedores(),
+            fetchBarrios(user.id)
+          ])
           setGastos(gastosData)
           setSubcategorias(subcategoriasData)
           setProveedores(proveedoresData)
+          setBarrios(barriosData)
         }
       } catch (error) {
         console.error('Error fetching data:', error)
@@ -62,10 +70,9 @@ const Gastos = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const barrio = getBarrioFromLocalStorage().barrio;
-
-      if (barrio) {
-        newGasto.barrio_id = barrio.id
+      const user = getUserFromLocalStorage();
+      if (user) {
+        newGasto.barrio_id = user.id
       }
       if (editingGasto) {
         await updateGasto(editingGasto.id!, newGasto)
@@ -108,9 +115,9 @@ const Gastos = () => {
       if (result.isConfirmed) {
         try {
           await deleteGasto(id)
-          const barrio = getBarrioFromLocalStorage()
-          if (barrio) {
-            const data = await fetchGastosByBarrio(barrio.id)
+          const user = getUserFromLocalStorage()
+          if (user) {
+            const data = await fetchGastosByBarrio(user.id)
             setGastos(data)
           }
           MySwal.fire('Borrado', 'El gasto ha sido borrado', 'success')
@@ -137,9 +144,9 @@ const Gastos = () => {
     if (file) {
       try {
         await importGastos(file)
-        const barrio = getBarrioFromLocalStorage().barrio
-        if (barrio) {
-          const data = await fetchGastosByBarrio(barrio.id)
+        const user = getUserFromLocalStorage()
+        if (user) {
+          const data = await fetchGastosByBarrio(user.id)
           setGastos(data)
         }
         MySwal.fire('Importado', 'Los gastos han sido importados correctamente', 'success')
@@ -230,6 +237,23 @@ const Gastos = () => {
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={handleSubmit}>
+            <div className='mb-3'>
+              <label className='form-label'>Barrio</label>
+              <select
+                name='barrio_id'
+                value={newGasto.barrio_id}
+                onChange={handleInputChange}
+                className='form-control'
+                required
+              >
+                <option value=''>Seleccione un barrio</option>
+                {barrios.map((barrio) => (
+                  <option key={barrio.id} value={barrio.id}>
+                    {barrio.nombre}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className='mb-3'>
               <label className='form-label'>Subcategoría</label>
               <select
