@@ -5,7 +5,7 @@ import withReactContent from 'sweetalert2-react-content'
 import { KTSVG } from '../../../../../_metronic/helpers'
 import { PageTitle } from '../../../../../_metronic/layout/core'
 import { getUserFromLocalStorage } from '../../services/authServices'
-import { Barrio, fetchBarrios } from '../../services/barrioService'
+import { Barrio, fetchBarriosByUserId } from '../../services/barrioService'
 import { createGasto, deleteGasto, exportGastos, fetchGastosByBarrio, fetchSubcategorias, Gasto, importGastos, updateGasto } from '../../services/gastosService'
 import { fetchProveedores, Proveedor } from '../../services/proveedorService'
 
@@ -47,7 +47,7 @@ const Gastos = () => {
             fetchGastosByBarrio(user.id),
             fetchSubcategorias(),
             fetchProveedores(),
-            fetchBarrios(user.id)
+            fetchBarriosByUserId(user.id)
           ])
           setGastos(gastosData)
           setSubcategorias(subcategoriasData)

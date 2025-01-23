@@ -11,7 +11,11 @@ export interface Barrio {
 }
 
 // Obtener los barrios administrados por el usuario actual
-export const fetchBarrios = async (userId: number): Promise<Barrio[]> => {
+export const fetchBarrios = async (): Promise<Barrio[]> => {
+    const response = await api.get(`/barrios`);
+    return response.data;
+};
+export const fetchBarriosByUserId = async (userId: number): Promise<Barrio[]> => {
     const response = await api.get(`/barrios/admin?user_id=${userId}`);
     return response.data;
 };
