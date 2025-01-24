@@ -20,6 +20,7 @@ use App\Http\Controllers\{
     UnidadFuncionalController, // Importar el controlador de Unidades Funcionales
     ProveedorController // Importar el controlador de Proveedores
 };
+use App\Http\Middleware\LogApiRequest;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +34,7 @@ use App\Http\Controllers\{
 */
 
 // Rutas públicas de la API
-Route::middleware('api')->group(function () {
+Route::middleware(['api', LogApiRequest::class])->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/verify_token', [AuthController::class, 'verifyToken'])->middleware('auth:sanctum');
     
