@@ -19,10 +19,12 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [
-        'http://app.adminbarrio.com',
-        'https://app.adminbarrio.com/',
-        'http://localhost:5173'
+    'allowed_origins' => [        
+        'http://adminbarrio.com',
+        'https://adminbarrio.com/',
+        'http://app.adminbarrio.com',        
+        'https://app.adminbarrio.com/',        
+        'http://localhost:5173',        
     ],
 
     'allowed_origins_patterns' => [],
