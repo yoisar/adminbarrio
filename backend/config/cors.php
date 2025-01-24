@@ -21,9 +21,9 @@ return [
 
     'allowed_origins' => [        
         'http://adminbarrio.com',
-        'https://adminbarrio.com/',
+        'https://adminbarrio.com',
         'http://app.adminbarrio.com',        
-        'https://app.adminbarrio.com/',        
+        'https://app.adminbarrio.com',        
         'http://localhost:5173',        
     ],
 
