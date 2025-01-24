@@ -2,7 +2,7 @@ import { User } from '../../auth/core/_models';
 import api from './api';
 
 export const login = async (email: string, password: string, role: string) => {
-    const response = await api.post('/login', { email, password, role })
+    const response = await api.post('login', { email, password, role })
     const { access_token, barrio, user } = response.data
 
     // Guardar el token, el barrio y el usuario en localStorage
