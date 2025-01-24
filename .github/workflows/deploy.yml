@@ -92,7 +92,6 @@ jobs:
             if [ ! -f "frontend/.env" ]; then
               echo "Error: frontend/.env not found"
               exit 1
-            fi
-            docker-compose down --remove-orphans -v
+            fi            
             docker-compose up -d --build adminbarrio-backend adminbarrio-frontend
             docker-compose exec -T adminbarrio-backend php artisan migrate --force
