@@ -21,6 +21,8 @@ return [
 
     'allowed_origins' => [        
         'http://adminbarrio.com',
+        'http://api.adminbarrio.com',
+        'https://api.adminbarrio.com',
         'https://adminbarrio.com',
         'http://app.adminbarrio.com',        
         'https://app.adminbarrio.com',        
